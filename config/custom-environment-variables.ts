@@ -5,10 +5,3 @@ export default {
     accessTokenPrivateKey: 'ACCESS_TOKEN_PRIVATE_KEY',
     accessTokenPublicKey: 'ACCESS_TOKEN_PUBLIC_KEY'
 };
-
-/**
- * NB
- * have switched dbName to MONGODB_DATABASE_NAME
- * dbUsername: to MONGODB_USERNAME
- * be aware different from tutorial
- */

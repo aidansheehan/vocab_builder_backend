@@ -42,7 +42,7 @@ export const registerHandler = async (
         //Create a user with the specified credentials
         const user = await createUser({
             email: req.body.email,
-            name: req.body.name,
+            username: req.body.username,
             password: req.body.password
         });
 
@@ -94,7 +94,7 @@ export const loginHandler = async (
         //Create an access token
         const { accessToken } = await signToken(user);
 
-        //Send access token in Cookie
+        //Send access token in Cookie TODO configure here so access token only sent in cookie
         res.cookie('accessToken', accessToken, accessTokenCookieOptions);
         res.cookie('logged_in', true, {
             ...accessTokenCookieOptions,
@@ -105,6 +105,7 @@ export const loginHandler = async (
         res.status(200).json({
             status: 'success',
             accessToken,
+            user
         });
     } catch (err: any) {
         next(err);

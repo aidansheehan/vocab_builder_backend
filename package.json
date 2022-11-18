@@ -1,5 +1,5 @@
 {
-  "name": "y",
+  "name": "vocab_builder_backend",
   "version": "1.0.0",
   "description": "Containerized backend for flashcard generation project",
   "main": "index.js",
