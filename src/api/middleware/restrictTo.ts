@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response }  from "express";
-import AppError                             from "../utils/appError";
+import AppError                             from "../helpers/appError";
 
 /**
  * This middleware checks if the user role exists in allowedRoles array.

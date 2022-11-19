@@ -1,9 +1,9 @@
 import { RedisCommandArgument } from "@redis/client/dist/lib/commands";
 import { NextFunction, Request, Response }  from "express";
 import { findUserById }                     from "../services/user.service";
-import AppError                             from "../utils/appError";
-import redisClient                          from "../utils/connectRedis";
-import { verifyJwt }                        from "../utils/jwt";
+import AppError                             from "../helpers/appError";
+import redisClient                          from "../helpers/connectRedis";
+import { verifyJwt }                        from "../helpers/jwt";
 
 /**
  * Middleware responsible for deserializing the User

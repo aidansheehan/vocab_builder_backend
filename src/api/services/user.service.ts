@@ -3,10 +3,9 @@ import { FilterQuery, QueryOptions }    from 'mongoose';
 import config                           from 'config';
 import userModel, { User }              from '../models/user.model';
 import { excludedFields }               from '../controllers/auth.controller';
-import { signJwt }                      from '../utils/jwt';
-import redisClient                      from '../utils/connectRedis';
+import { signJwt }                      from '../helpers/jwt';
+import redisClient                      from '../helpers/connectRedis';
 import { DocumentType }                 from '@typegoose/typegoose';
-import { RedisCommandArgument } from '@redis/client/dist/lib/commands';
 
 /**
  * Service for communicating with the database
