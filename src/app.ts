@@ -1,12 +1,13 @@
 require('dotenv').config();
+
 import express, { NextFunction, Request, Response } from 'express';
 import morgan                                       from 'morgan';
 import config                                       from 'config';
 import cors                                         from 'cors';
 import cookieParser                                 from 'cookie-parser';
-import connectDB                                    from './utils/connectDB';
-import userRouter                                   from './routes/user.route'
-import authRouter                                   from './routes/auth.route';
+import connectDB                                    from './api/helpers/connectDB';
+import userRouter                                   from './api/routes/user.route'
+import authRouter                                   from './api/routes/auth.route';
 
 //Create express instance
 const app = express();
