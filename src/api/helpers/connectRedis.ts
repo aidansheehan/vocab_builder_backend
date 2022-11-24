@@ -4,7 +4,7 @@ import { createClient } from "redis";
  * Script to connect express app to Redis container
  */
 const redisPort     = '6379';                               //Set redis port
-const redisUrl      = `redis://localhost:${redisPort}`;     //Create redis connection url
+const redisUrl      = `redis://redis:${redisPort}`;     //Create redis connection url
 const redisClient   = createClient({ url: redisUrl });      //Create redis client object
 
 //Function to connect to redis

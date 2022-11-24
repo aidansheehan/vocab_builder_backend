@@ -1,5 +1,26 @@
 version: '3.8'
 services:
+  vocab-builder:
+    container_name: vocab-builder
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      MONGODB_DATABASE_NAME: ${MONGODB_DATABASE_NAME}
+      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
+      MONGODB_USERNAME: ${MONGODB_USERNAME}
+      ACCESS_TOKEN_PRIVATE_KEY: ${ACCESS_TOKEN_PRIVATE_KEY}
+      ACCESS_TOKEN_PUBLIC_KEY: ${ACCESS_TOKEN_PUBLIC_KEY}
+    env_file:
+      - ./.env
+    ports:
+      - '8000:8000'
+    depends_on:
+      redis:
+        condition: service_started
+      mongo:
+        condition: service_started
   mongo:
     image: mongo:latest
     container_name: mongo

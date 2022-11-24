@@ -21,8 +21,15 @@ These need to be configured for purpose but at the moment:
 * /api/users - see all users content (admin only)
 
 ## Docker Compose Requirements
-Before starting the server run
+Before starting the server run:
+````
+docker compose build
+````
+to build and tag services.
+
+Next, run:
+
 ```
 docker compose up
 ```
-to generate redis and mongoDB containers.
+to generate redis, mongoDB and vocab builder app containers.

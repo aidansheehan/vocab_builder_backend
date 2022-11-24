@@ -6,7 +6,7 @@ import config   from 'config';
  */
 
 //DB connection url
-const dbUrl = `mongodb://${config.get('dbUsername')}:${config.get('dbPass')}@localhost:6000/${config.get('dbName')}?authSource=admin`;
+const dbUrl = `mongodb://${config.get('dbUsername')}:${config.get('dbPass')}@mongo/${config.get('dbName')}?authSource=admin`;
 
 
 //Connect to the database
