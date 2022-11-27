@@ -4,7 +4,8 @@
   "description": "Containerized backend for flashcard generation project",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node-dev --respawn --transpile-only src/app.ts"
+    "start": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "dev": "nodemon --inspect=0.0.0.0 src/app.ts"
   },
   "authors": [
     {

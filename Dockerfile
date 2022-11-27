@@ -6,11 +6,13 @@ WORKDIR /
 
 # Install app dependencies
 COPY package*.json ./
+COPY nodemon.json ./
 COPY tsconfig.json ./
 COPY src ./src
 
 # Install all dependencies
 RUN npm install
+RUN npm install -g nodemon
 
 # Bundle app source
 COPY . .
@@ -19,4 +21,4 @@ COPY . .
 EXPOSE 8000
 
 # Start
-CMD [ "npm", "run", "start" ]
+CMD [ "npm", "run", "dev" ]
