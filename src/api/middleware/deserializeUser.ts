@@ -1,4 +1,4 @@
-import { RedisCommandArgument } from "@redis/client/dist/lib/commands";
+import { RedisCommandArgument } from "@redis/client/dist/lib/commands"; //TODO remove?
 import { NextFunction, Request, Response }  from "express";
 import { findUserById }                     from "../services/user.service";
 import AppError                             from "../helpers/appError";

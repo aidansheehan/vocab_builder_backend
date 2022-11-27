@@ -8,6 +8,7 @@ import cookieParser                                 from 'cookie-parser';
 import connectDB                                    from './api/helpers/connectDB';
 import userRouter                                   from './api/routes/user.route'
 import authRouter                                   from './api/routes/auth.route';
+import collectionRouter                             from './api/routes/collection.route';
 
 //Create express instance
 const app = express();
@@ -30,6 +31,7 @@ app.use(
 // 5. Routes 
 app.use('/api/users', userRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/collections', collectionRouter);
 
 //Testing
 app.get('/healthChecker', (req: Request, res: Response, next: NextFunction) => {

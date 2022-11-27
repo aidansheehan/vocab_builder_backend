@@ -24,8 +24,6 @@ export const signJwt = (payload: Object, options: SignOptions = {}) => {
 // Generic function to verify a Jason Web token - returns null if token invalid or expired
 export const verifyJwt = <T>(token: string): T | null => {
 
-    console.log('token: ', token)
-
     try {
 
         //Convert base 64 public key to ASCII string
