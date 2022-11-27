@@ -1,29 +1,23 @@
-import { object,/* array,*/ string, TypeOf } from 'zod';
+import { object, array, string, TypeOf } from 'zod';
 
 /**
- * createCollection validation schema TODO - if can be generic should call generic name collectionSchema maybe
+ * Single card validation schema
  */
-export const createCollectionSchema = object({
-    body: object({
-        title: string({ required_error: 'Title is required' }),
-        description: string({ required_error: 'Description is required' }),
-
-        // //TBD
-        // cards: array({
-
-        // })
-    })
+export const Card = object({
+    lexi: string({ required_error: 'Lexi is required' }),
+    description: string({ required_error: 'Description is required' })
 })
 
 /**
- * findCollectionById validation schema
+ * Collection validation schema
  */
-// export const findCollectionByIdSchema = object({
+export const collectionSchema = object({
+    body: object({
+        title: string({ required_error: 'Title is required' }),
+        description: string({ required_error: 'Description is required' }),
+        cards: array(Card)
+    })
+})
 
-// })
 
-/**
- * createCard validation schema
- */
-
-export type CreateCollectionInput = TypeOf<typeof createCollectionSchema>['body'];
+export type CollectionInput = TypeOf<typeof collectionSchema>['body'];

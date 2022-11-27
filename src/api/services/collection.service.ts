@@ -1,4 +1,3 @@
-import { DocumentType }                 from "@typegoose/typegoose";
 import collectionModel, { Collection }  from "../models/collection.model"
 
 /**

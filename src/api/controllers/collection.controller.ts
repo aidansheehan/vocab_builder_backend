@@ -1,27 +1,14 @@
-import { NextFunction, Request, Response } from "express";
-import { CreateCollectionInput } from "../schemas/collection.schema";
+import { NextFunction, Request, Response }                                                                      from "express";
+import { CollectionInput }                                                                                      from "../schemas/collection.schema";
 import { createCollection, deleteCollectionById, findAllCollections, findCollectionById, updateCollectionById } from "../services/collection.service";
+import { TypedRequest, TypedRequestQuery }                                                                      from "./types/collection.controller.types";
 
-import { Query } from 'express-serve-static-core';
-
-/** TODO export these to their own types file in types folder under controllers or whatever (+ Query import above) */
-export interface TypedRequestQuery<T extends Query> extends
-Request {
-
-    query: T
-}
-
-export interface TypedRequest<T extends Query, U> extends
-Request {
-    body: U,
-    query: T
-}
 
 /**
  * Create and save a new collection
  */
 export const createCollectionHandler = async (
-    req: Request<{}, {}, CreateCollectionInput>,
+    req: Request<{}, {}, CollectionInput>,
     res: Response,
     next: NextFunction
 ) => {
@@ -132,7 +119,7 @@ export const findOneCollectionHandler = async (
  * Update a collection by the id in the request
  */
 export const updateCollectionHandler = async (
-    req: TypedRequest<{ id: string }, CreateCollectionInput>,
+    req: TypedRequest<{ id: string }, CollectionInput>,
     res: Response,
     next: NextFunction
 ) => {
