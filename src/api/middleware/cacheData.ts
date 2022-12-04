@@ -22,7 +22,7 @@ export const cacheData = async (
     
     try {
 
-        const cacheResults = await redisClient.get(collectionId);   //Attempt to retrieve data from redis
+        const cacheResults = await redisClient.get(`collection:${collectionId}`);   //Attempt to retrieve data from redis
 
         //If data cached (found in Redis)
         if (cacheResults) {
@@ -89,7 +89,7 @@ export const deleteCacheData = async (
     try {
 
         //Attempt to retrieve data from redis
-        const cacheResults = await redisClient.get(collectionId);
+        const cacheResults = await redisClient.get(`collection:${collectionId}`);
 
         //If data cached (found in Redis)
         if (cacheResults) {
@@ -112,7 +112,7 @@ export const deleteCacheData = async (
             else {
 
                 //Delete the data from cache memory TODO this is not working
-                await redisClient.del(collectionId);
+                await redisClient.del(`collection:${collectionId}`);
 
                 //Proceed to controller to delete from mongo DB
                 next();

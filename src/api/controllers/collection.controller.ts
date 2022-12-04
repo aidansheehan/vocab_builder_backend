@@ -108,7 +108,7 @@ export const findOneCollectionHandler = async (
             else {
 
                 //Cache data in redis
-                await redisClient.set(collectionId, JSON.stringify(results), {
+                await redisClient.set(`collection:${collectionId}`, JSON.stringify(results), {
                     EX: 180,
                     NX: true
                 });

@@ -39,7 +39,7 @@ export const deserializeUser = async (
         }
 
         //Get user session
-        const session = await redisClient.get(decoded.sub);
+        const session = await redisClient.get(`user:${decoded.sub}`);
 
         //If no session in redis user session expired
         if (!session) {
