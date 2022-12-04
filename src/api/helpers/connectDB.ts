@@ -12,10 +12,7 @@ const dbUrl = `mongodb://${config.get('dbUsername')}:${config.get('dbPass')}@mon
 //Connect to the database
 const connectDB = async () => {
     try {
-        // await mongoose.connect(dbUrl);
-        //@ts-ignore
         await mongoose.connect(dbUrl);
-
         console.log('Database connected...');
     } catch (error: any) {
 

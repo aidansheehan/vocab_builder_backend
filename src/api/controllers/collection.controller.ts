@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response }                                                                      from "express";
+import redisClient                                                                                              from "../helpers/connectRedis";
 import { CollectionInput }                                                                                      from "../schemas/collection.schema";
 import { createCollection, deleteCollectionById, findAllCollections, findCollectionById, updateCollectionById } from "../services/collection.service";
 import { TypedRequest, TypedRequestQuery }                                                                      from "./types/collection.controller.types";
@@ -77,39 +78,65 @@ export const findOneCollectionHandler = async (
     res: Response,
     next: NextFunction
 ) => {
+
+    let results; //Init results
+
+    const { user }              = res.locals;   //Get user
+    const { _id: userId }       = user;         //Destructure user for id
+    const { id: collectionId }  = req.params    //Get collection ID from request params
+
     try {
 
-        const { user }          = res.locals    //Destructure res.locals
-        const { _id: userId }   = user;         //Destructure user
+        results = await findCollectionById(collectionId); //Retrieve data from mongo
 
-        const { id: collectionId } = req.params; //Get collection id from request params
+        //If collection exists
+        if (results) {
 
-        //Retrieve collection
-        const collection = await findCollectionById(collectionId);
+            //user doesn't own this collection
+            if (results?.user_id !== userId.toString()) {
 
-        //Check collection belongs to this user
-        if (collection?.user_id !== userId.toString()) {
+                //Return error
+                res.status(401).json({
+                    status: 'failed',
+                    data: {
+                        error: 'This user is not authorized to access this collection'
+                    }
+                });
+            }
+        
+            //user owns this collection
+            else {
 
-            //If user doesn't own collection return authorization error
-            res.status(401).json({
+                //Cache data in redis
+                await redisClient.set(collectionId, JSON.stringify(results), {
+                    EX: 180,
+                    NX: true
+                });
+
+                //Return data to the user
+                res.status(202).json({
+                    status: 'success',
+                    data: {
+                        fromCache: false,
+                        data: results
+                    }
+                })
+            }
+
+        }
+
+        //Collection doesn't exist
+        else {
+
+            //Return not found error
+            res.status(404).json({
                 status: 'failed',
                 data: {
-                    error: 'This user is not authorized to access this collection'
+                    error: 'This collection wasn\'t found'
                 }
-            });
+            })
         }
 
-        //If collection belongs to this user
-        else {
-            
-            //Return collection to the user
-            res.status(202).json({
-                status: 'success',
-                data: {
-                    collection
-                }
-            });
-        }
     } catch (err: any) {
         next(err);
     }

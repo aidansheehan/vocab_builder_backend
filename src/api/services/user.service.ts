@@ -49,6 +49,9 @@ export const signToken = async (user: DocumentType<User>) => {
     
     //Create a session with expiry time 60 * 60s = 1 hour
     redisClient.setEx(user._id.toString(), 60 * 60, JSON.stringify(user));
+    
+    //TODO should set NX value whether set command can overwrite existing entries? 
+    // redisClient.setNX();
 
     //Return access token
     return { accessToken };
