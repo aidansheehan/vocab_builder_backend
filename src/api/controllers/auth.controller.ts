@@ -1,10 +1,10 @@
 import config                                               from 'config';
 import { CookieOptions, NextFunction, Request, Response }   from 'express';
 import { CreateUserInput, LoginUserInput }                  from '../schemas/user.schema';
-import { createUser, findUser, findUserById, signToken }                  from '../services/user.service';
+import { createUser, findUser, findUserById, signToken }    from '../services/user.service';
 import AppError                                             from '../helpers/appError';
-import { signJwt, verifyJwt }                                        from '../helpers/jwt';
-import redisClient from '../helpers/connectRedis';
+import { signJwt, verifyJwt }                               from '../helpers/jwt';
+import redisClient                                          from '../helpers/connectRedis';
 
 /**
  * Authentication Controller
