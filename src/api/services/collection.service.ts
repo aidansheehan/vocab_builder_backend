@@ -34,7 +34,6 @@ export const updateCollectionById = async (data: Partial<Collection>, id: string
     //TODO investigate prob need options here to prevent overwrite of collection id, may be other probs like wrong type
     return await collectionModel.findByIdAndUpdate(id, data);
 
-
 }
 
 // Delete a collection by it's ID

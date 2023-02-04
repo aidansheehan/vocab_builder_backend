@@ -151,8 +151,12 @@ export const updateCollectionHandler = async (
             //Update collection with new data
             await updateCollectionById(req.body, collectionId);
 
+            //Retrieve updated collection from DB TODO i'm not sure if this will always wait for DB to be updated?
+            const newCollection = await findCollectionById(collectionId);
+
             res.status(202).json({
-                status: 'success'
+                status: 'success',
+                data: newCollection
             });
         }
     } catch (err: any) {
@@ -197,7 +201,8 @@ export const deleteCollectionHandler = async (
             await deleteCollectionById(collectionId);
 
             res.status(202).json({
-                status: 'success'
+                status: 'success',
+                _id: collectionId
             });
         }
     } catch (err: any) {
