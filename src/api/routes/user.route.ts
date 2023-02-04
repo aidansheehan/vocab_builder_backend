@@ -10,7 +10,10 @@ import { restrictTo }                       from '../middleware/restrictTo';
  *  - get the currently logged-in users credentials (all)
  */
 
+//Init router
 const router = express.Router();
+
+//Configure router to use middleware
 router.use(deserializeUser, requireUser);
 
 //Admin get users route
