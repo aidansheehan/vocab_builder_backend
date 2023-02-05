@@ -42,14 +42,22 @@ export const signToken = async (user: DocumentType<User>) => {
     //Sign the access token //not sure if need to convert user id to string?
     const accessToken = signJwt(
         { sub: user._id },
+        'accessTokenPrivateKey',
         {
             expiresIn: `${config.get<number>('accessTokenExpiresIn')}m`,
-        }
-    );
+        });
+
+    //Sign the refresh token
+    const refreshToken = signJwt(
+        { sub: user._id },
+        'refreshTokenPrivateKey',
+        {
+            expiresIn: `${config.get<number>('refreshTokenExpiresIn')}m`,
+        });
     
     //Create a session with expiry time 60 * 60s = 1 hour
     redisClient.setEx(user._id.toString(), 60 * 60, JSON.stringify(user));
 
     //Return access token
-    return { accessToken };
+    return { accessToken, refreshToken };
 }

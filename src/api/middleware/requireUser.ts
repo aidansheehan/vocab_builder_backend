@@ -3,7 +3,7 @@ import AppError                             from "../helpers/appError";
 
 /**
  * This middleware will be called after deserializeUser middleware to check
- * if the user exists on res.loca.s
+ * if the user exists on res.locals
  */
 export const requireUser = (
     req: Request,
