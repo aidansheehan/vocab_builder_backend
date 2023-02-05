@@ -2,7 +2,7 @@ import express                          from 'express';
 import { deserializeUser }              from '../middleware/deserializeUser';
 import { requireUser }                  from '../middleware/requireUser';
 import { validate }                     from '../middleware/validate';
-import { collectionSchema }             from '../schemas/collection.schema';
+import { collectionInfoSchema }             from '../schemas/collection.schema';
 import { createCollectionHandler, 
     deleteAllCollectionsHandler, 
     deleteCollectionHandler, 
@@ -18,8 +18,8 @@ import { createCollectionHandler,
 const router = express.Router();
 router.use(deserializeUser, requireUser);
 
-//Create a New Collection
-router.post('/', validate(collectionSchema), createCollectionHandler);
+//Create a New Collection (info)
+router.post('/', validate(collectionInfoSchema), createCollectionHandler);
 
 //Retrieve All Collections
 router.get('/', findAllCollectionsHandler);
@@ -27,13 +27,16 @@ router.get('/', findAllCollectionsHandler);
 //Retrieve a Single Collection with Id
 router.get('/:id', findOneCollectionHandler);
 
-//Update a Collection with Id
-router.put('/:id', validate(collectionSchema), updateCollectionHandler);
+//Update a Collection (info) with Id
+router.put('/:id', validate(collectionInfoSchema), updateCollectionHandler);
 
 //Delete a collection with Id
 router.delete('/:id', deleteCollectionHandler);
 
 //Delete all user's collections
 router.delete('/', deleteAllCollectionsHandler);
+
+// //Create a new card in a collection
+// router.post('/:collectionId/cards', validate(cardSchema),  )
 
 export default router;
