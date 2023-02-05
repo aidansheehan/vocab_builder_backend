@@ -62,6 +62,75 @@ export const createCard = async (collectionId: string, data: Card) => {
     //Save the collection to the database
     await collection.save();
 
-    //Return the card
-    return cardWithId;
+    //Return the modified collection
+    return collection;
+}
+
+//Service to update an existing card in a collection
+export const updateCard = async (collectionId: string, cardId: string, data: Card) => {
+
+    //Find the collection by its ID
+    const collection = await collectionModel.findById(collectionId);
+
+    //Check if the collection exists
+    if (!collection) {
+        throw new Error(`Collection with ID ${collectionId} not found.`);
+    }
+
+    //Construct card with ID
+    const cardWithId = { ...data, id: cardId }
+
+    //Find the card TODO should refactor by indexing array VBB-8
+    const newCards = collection.cards.map(c_ => {
+
+        //If card id matches
+        if (c_.id == cardId) {
+
+            //Replace card with new data
+            return cardWithId
+        }
+
+        //If card id doesn't match
+        else {
+
+            //Return card as it was
+            return c_
+        }
+    })
+
+    //Replace old cards array with new cards array
+    collection.cards = newCards;
+
+    //Save the modified collection to the database
+    await collection.save();
+
+    //Return the modified collection
+    return collection;
+
+}
+
+//Service to delete a single card from a collection
+export const deleteCard = async (collectionId: string, cardId: string) => {
+
+    //Find the collection by its ID
+    const collection = await collectionModel.findById(collectionId);
+
+    //Check if the collection exists
+    if (!collection) {
+        throw new Error(`Collection with ID ${collectionId} not found.`);
+    }
+
+    //Filter array for card with specified id
+    const newCards = collection.cards.filter(c_ => {
+        return c_.id !== cardId
+    })
+
+    //Replace old cards array with array with card with specified id removed
+    collection.cards = newCards;
+
+    //Save the modified collection to the database
+    await collection.save();
+
+    //Return the modified collection
+    return collection;
 }

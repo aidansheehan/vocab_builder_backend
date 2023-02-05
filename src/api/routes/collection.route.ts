@@ -6,10 +6,12 @@ import { cardSchema, collectionInfoSchema }     from '../schemas/collection.sche
 import { createCardHandler, 
     createCollectionHandler, 
     deleteAllCollectionsHandler, 
+    deleteCardHandler, 
     deleteCollectionHandler, 
     findAllCollectionsHandler, 
     findOneCollectionHandler, 
-    updateCollectionHandler }      from '../controllers/collection.controller';
+    updateCardHandler, 
+    updateCollectionHandler }                   from '../controllers/collection.controller';
 
 /**
  * Routes to:
@@ -37,7 +39,13 @@ router.delete('/:collectionId', deleteCollectionHandler);
 //Delete all user's collections
 router.delete('/', deleteAllCollectionsHandler);
 
-// //Create a new card in a collection
-router.post('/:collectionId/cards', validate(cardSchema), createCardHandler)
+//Create a new card in a collection
+router.post('/:collectionId/cards', validate(cardSchema), createCardHandler);
+
+//Update a card in a collection
+router.put('/:collectionId/cards/:cardId', validate(cardSchema), updateCardHandler);
+
+//Delete a card from a collection
+router.delete('/:collectionId/cards/:cardId', deleteCardHandler);
 
 export default router;
