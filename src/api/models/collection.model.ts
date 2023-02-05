@@ -9,6 +9,18 @@ export class Card {
     description: string;
 }
 
+//Export the card with generated ID class to be used as Typescript type
+export class CardWithId {
+    @prop({required: true})
+    lexi: string;
+
+    @prop({required: true})
+    description: string;
+
+    @prop({required: true})
+    id: string
+}
+
 //Export the collection class to be used as Typescript type
 export class Collection {
     @prop()
@@ -21,7 +33,7 @@ export class Collection {
     description: string;
 
     @prop()
-    cards: Array<Card>;
+    cards: Array<CardWithId>;
 
 }
 

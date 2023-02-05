@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response }                                                                      from "express";
-import { CollectionInput }                                                                                      from "../schemas/collection.schema";
-import { createCollection, deleteCollectionById, findAllCollections, findCollectionById, updateCollectionById } from "../services/collection.service";
-import { TypedRequest, TypedRequestQuery }                                                                      from "./types/collection.controller.types";
+import { NextFunction, Request, Response }                                                                                  from "express";
+import { CardInput, CollectionInput }                                                                                       from "../schemas/collection.schema";
+import { createCard, createCollection, deleteCollectionById, findAllCollections, findCollectionById, updateCollectionById } from "../services/collection.service";
+import { TypedRequest, TypedRequestQuery }                                                                                  from "./types/collection.controller.types";
 
 
 /**
@@ -244,10 +244,36 @@ export const deleteAllCollectionsHandler = async (
     }
 }
 
-// /**
-//  * Create a new card in a collection
-//  */
-// export const createCardHandler = async (
-//     req: Request<>,
+/**
+ * Create a new card in a collection
+ */
+export const createCardHandler = async (
+    req: TypedRequest<{ collectionId: string }, CardInput>,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
 
-// )
+        //TODO VBB-8: need to check this collection belongs to current user
+        // const { user }  = res.locals;   //Destructure res.locals
+        // const { _id }   = user;         //Destructure user for id
+
+        const { collectionId } = req.params;    //Get collectionId from request params
+
+        //Create a card with the specified data
+        const card = await createCard(collectionId, req.body)
+
+        //Return success and created card
+        res.status(202).json({
+            status: 'success',
+            data: {
+                card
+            }
+        })
+    }
+
+    catch (err: any) {
+        next(err);
+    }
+
+}

@@ -1,9 +1,10 @@
-import express                          from 'express';
-import { deserializeUser }              from '../middleware/deserializeUser';
-import { requireUser }                  from '../middleware/requireUser';
-import { validate }                     from '../middleware/validate';
-import { collectionInfoSchema }             from '../schemas/collection.schema';
-import { createCollectionHandler, 
+import express                                  from 'express';
+import { deserializeUser }                      from '../middleware/deserializeUser';
+import { requireUser }                          from '../middleware/requireUser';
+import { validate }                             from '../middleware/validate';
+import { cardSchema, collectionInfoSchema }     from '../schemas/collection.schema';
+import { createCardHandler, 
+    createCollectionHandler, 
     deleteAllCollectionsHandler, 
     deleteCollectionHandler, 
     findAllCollectionsHandler, 
@@ -37,6 +38,6 @@ router.delete('/:id', deleteCollectionHandler);
 router.delete('/', deleteAllCollectionsHandler);
 
 // //Create a new card in a collection
-// router.post('/:collectionId/cards', validate(cardSchema),  )
+router.post('/:collectionId/cards', validate(cardSchema), createCardHandler)
 
 export default router;
