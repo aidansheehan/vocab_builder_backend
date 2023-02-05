@@ -26,13 +26,13 @@ router.post('/', validate(collectionInfoSchema), createCollectionHandler);
 router.get('/', findAllCollectionsHandler);
 
 //Retrieve a Single Collection with Id
-router.get('/:id', findOneCollectionHandler);
+router.get('/:collectionId', findOneCollectionHandler);
 
 //Update a Collection (info) with Id
-router.put('/:id', validate(collectionInfoSchema), updateCollectionHandler);
+router.put('/:collectionId', validate(collectionInfoSchema), updateCollectionHandler);
 
 //Delete a collection with Id
-router.delete('/:id', deleteCollectionHandler);
+router.delete('/:collectionId', deleteCollectionHandler);
 
 //Delete all user's collections
 router.delete('/', deleteAllCollectionsHandler);

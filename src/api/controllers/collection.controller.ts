@@ -73,7 +73,7 @@ export const findAllCollectionsHandler = async (
  * Find a single collection with an id
  */
 export const findOneCollectionHandler = async (
-    req: TypedRequestQuery<{ id: string }>,
+    req: TypedRequestQuery<{ collectionId: string }>,
     res: Response,
     next: NextFunction
 ) => {
@@ -82,7 +82,7 @@ export const findOneCollectionHandler = async (
         const { user }          = res.locals    //Destructure res.locals
         const { _id: userId }   = user;         //Destructure user
 
-        const { id: collectionId } = req.params; //Get collection id from request params
+        const { collectionId } = req.params; //Get collection id from request params
 
         //Retrieve collection
         const collection = await findCollectionById(collectionId);
@@ -119,7 +119,7 @@ export const findOneCollectionHandler = async (
  * Update a collection by the id in the request
  */
 export const updateCollectionHandler = async (
-    req: TypedRequest<{ id: string }, CollectionInput>,
+    req: TypedRequest<{ collectionId: string }, CollectionInput>,
     res: Response,
     next: NextFunction
 ) => {
@@ -128,7 +128,7 @@ export const updateCollectionHandler = async (
         const { user }          = res.locals;   //Destructure res.locals
         const { _id: userId }   = user;         //Destructure user
 
-        const { id: collectionId } = req.params;    //Get collectionId from request params
+        const { collectionId } = req.params;    //Get collectionId from request params
 
         //Retrieve collection
         const collection = await findCollectionById(collectionId);
@@ -168,7 +168,7 @@ export const updateCollectionHandler = async (
  * Delete a collection with the specified id in the request
  */
 export const deleteCollectionHandler = async (
-    req: TypedRequestQuery<{ id: string }>,
+    req: TypedRequestQuery<{ collectionId: string }>,
     res: Response,
     next: NextFunction
 ) => {
@@ -177,7 +177,7 @@ export const deleteCollectionHandler = async (
         const { user }          = res.locals;   //Destructure res.locals
         const { _id: userId }   = user;         //Destructure user
 
-        const { id: collectionId } = req.params;    //Get collectionId from request params
+        const { collectionId } = req.params;    //Get collectionId from request params
 
         //Retrieve collection
         const collection = await findCollectionById(collectionId);
