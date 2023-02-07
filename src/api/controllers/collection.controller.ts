@@ -327,7 +327,7 @@ export const updateCardHandler = async (
             res.status(202).json({
                 status: 'success',
                 data: {
-                    newCollection
+                    collection: newCollection
                 }
             })
 
@@ -382,7 +382,7 @@ export const deleteCardHandler = async (
             res.status(202).json({
                 status: 'success',
                 data: {
-                    newCollection
+                    collection: newCollection
                 }
             })
         }
