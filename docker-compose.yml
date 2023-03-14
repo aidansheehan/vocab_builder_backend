@@ -1,5 +1,30 @@
 version: '3.8'
+
 services:
+
+  traefik:
+    image: "traefik:v2.9"
+    container_name: "traefik"
+    command:
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var./run/docker.sock:ro"
+
+  whoami:
+    image: "traefik/whoami"
+    container_name: "simple-service"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.dictaglot.com`)"
+      - "traefik.http.routers.whoami.entrypoints=web"
+
   vocab-builder:
     container_name: vocab-builder
     restart: always
@@ -21,6 +46,7 @@ services:
         condition: service_started
       mongo:
         condition: service_started
+
   mongo:
     image: mongo:latest
     container_name: mongo
@@ -36,6 +62,7 @@ services:
       - '6000:27017'
     command:
       - mongod
+
   redis:
     image: redis:latest
     container_name: redis
@@ -43,6 +70,7 @@ services:
       - '6379:6379'
     volumes:
       - redis:/data
+
 volumes:
   mongo:
   redis:
