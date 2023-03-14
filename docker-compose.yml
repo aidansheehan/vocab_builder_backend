@@ -1,5 +1,14 @@
 version: '3.8'
 services:
+  traefik:
+    image: traefik:2.1
+    restart: always
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./traefik:/etc/traefik
+      - /var/run/docker.sock:/var/run/docker.sock:ro
   vocab-builder:
     container_name: vocab-builder
     restart: always
@@ -15,7 +24,12 @@ services:
     env_file:
       - ./.env
     ports:
-      - '80:80'
+      - '8000:8000'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.my-app.rule=Host(`dictaglot.com`)'
+      - 'traefik.http.routers.my-app.tls=true'
+      - 'traefik.http.routers.my-app.tls.certresolver=lets-encrypt'
     depends_on:
       redis:
         condition: service_started
