@@ -6,8 +6,34 @@ import config                                       from 'config';
 import cors                                         from 'cors';
 import cookieParser                                 from 'cookie-parser';
 import connectDB                                    from './api/helpers/connectDB';
-import userRouter                                   from './api/routes/user.route'
+import userRouter                                   from './api/routes/user.route';
 import authRouter                                   from './api/routes/auth.route';
+
+const swaggerJSDoc  = require('swagger-jsdoc');
+const swaggerUi     = require('swagger-ui-express');
+
+const swaggerDefinition = {
+    openapi: '3.0.0',
+    info: {
+        title: 'Express API for Vocab Builder',
+        version: '0.1.0',
+        description:
+            'This is a REST API application made with Express. It provides an authentication service and CRUD operations for custom user flashcard decks.'
+    },
+    servers: [
+        {
+            url: 'http://localhost:8000',
+            description: 'Development server',
+        }
+    ]
+};
+
+const options = {
+    swaggerDefinition,
+    apis: ['./src/api/routes/*.ts']
+};
+
+const swaggerSpec = swaggerJSDoc(options);
 
 //Create express instance
 const app = express();
@@ -30,6 +56,9 @@ app.use(
 // 5. Routes 
 app.use('/api/users', userRouter);
 app.use('/api/auth', authRouter);
+
+//6. Documentation with Swagger and JSDoc
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 //Testing
 app.get('/healthChecker', (req: Request, res: Response, next: NextFunction) => {

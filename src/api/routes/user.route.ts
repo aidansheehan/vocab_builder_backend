@@ -17,7 +17,7 @@ const router = express.Router();
 router.use(deserializeUser, requireUser);
 
 //Admin get users route
-router.get('/', restrictTo('admin'), getAllUsersHandler);
+// router.get('/', restrictTo('admin'), getAllUsersHandler);
 
 // Get my info route
 router.get('/me', getMeHandler);

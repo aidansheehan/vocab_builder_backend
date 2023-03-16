@@ -13,20 +13,10 @@ import redisClient                                          from '../helpers/con
 // Exclude this field from the response
 export const excludedFields = ['password'];
 
-// Access Token Cookie options
-const accessTokenCookieOptions: CookieOptions = {
-    expires: new Date(
-        Date.now() + config.get<number>('accessTokenExpiresIn') * 60 * 1000
-    ),
-    maxAge: config.get<number>('accessTokenExpiresIn') * 60 * 1000,
-    httpOnly: true,
-    sameSite: 'lax',
-}
-
 //Refresh Token Cookie Options
 const refreshTokenCookieOptions: CookieOptions = {
     expires: new Date(
-        Date.now() + config.get<number>('refreshTokenExpiresIn') * 60 * 1000
+        Date.now() + config.get<number>('refreshTokenExpiresIn') * 60 * 1000    //TODO this converts refreshTokenExpiresIn value to minutes
     ),
     maxAge: config.get<number>('refreshTokenExpiresIn') * 60 * 1000,
     httpOnly: true,
@@ -35,7 +25,7 @@ const refreshTokenCookieOptions: CookieOptions = {
 
 // Only set secure to true in production
 if (process.env.NODE_ENV === 'production')
-    accessTokenCookieOptions.secure = true;
+    refreshTokenCookieOptions.secure = true;//TODO analyse in VBB-14 & test working on production
 
 /**
  * Function to handle register
@@ -58,15 +48,25 @@ export const registerHandler = async (
             password: req.body.password
         });
 
+        //Create the access and refresh tokens
+        const { accessToken, refreshToken } = await signToken(user)
+
+        //Send refresh token in Cookie
+        res.cookie('refreshToken', refreshToken, refreshTokenCookieOptions);
+
+        //Send access token response
         res.status(202).json({
-            status: 'success',
             data: {
-                user,
-            },
-        });
+                accessToken
+            }
+        })
+
     } catch (err: any) {
 
-        //Duplicate (user already exists) mongo code 11000
+        //Handle any errors thrown
+        console.error(err);
+
+        //Handle duplicate key errors from MongoDB (if email already exists)
         if (err.code === 11000) {
             return res.status(409).json({
                 status: 'fail',
@@ -106,32 +106,28 @@ export const loginHandler = async (
         //Create the access and refresh tokens
         const { accessToken, refreshToken } = await signToken(user);
 
-        //Send access token in Cookie TODO configure here so access token only sent in cookie
-        res.cookie('accessToken', accessToken, accessTokenCookieOptions);
+        //Send the refresh token in Cookie
         res.cookie('refreshToken', refreshToken, refreshTokenCookieOptions);
-        res.cookie('logged_in', true, {
-            ...accessTokenCookieOptions,
-            httpOnly: false,
-        });
 
-        //Send access token - TODO if configuring for HTTPOnlyCookie this should be removed
+        //Send access token - TODO reanalyse in VBB-14
         res.status(200).json({
-            status: 'success',
-            accessToken,
-            user//TODO is this needed?
+            data: {
+                accessToken
+            }
         });
     } catch (err: any) {
+        console.error(err);
         next(err);
     }
 };
 
 //TODO may need logout function here to clear cookies
 const logout = (res: Response) => {
-    res.cookie('accessToken', '', { maxAge: 1 });
+    // res.cookie('accessToken', '', { maxAge: 1 });
     res.cookie('refreshToken', '', { maxAge: 1 });
-    res.cookie('logged_in', '', {
-        maxAge: 1
-    })
+    // res.cookie('logged_in', '', {
+    //     maxAge: 1
+    // })
 }
 
 /**
@@ -208,12 +204,12 @@ export const refreshAccessTokenHandler = async(
             expiresIn: `${config.get<number>('accessTokenExpiresIn')}m`
         });
 
-        //Send the access token as cookie
-        res.cookie('accessToken', accessToken, accessTokenCookieOptions);
-        res.cookie('logged_in', true, {
-            ...accessTokenCookieOptions,
-            httpOnly: false,
-        });
+        // //Send the access token as cookie
+        // res.cookie('accessToken', accessToken, accessTokenCookieOptions);
+        // res.cookie('logged_in', true, {
+        //     ...accessTokenCookieOptions,
+        //     httpOnly: false,
+        // });
 
         //Send response
         res.status(200).json({

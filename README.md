@@ -33,3 +33,9 @@ Next, run:
 docker compose up
 ```
 to generate redis, mongoDB and vocab builder app containers.
+
+## Documentation
+Documentation is generated using
+* swagger-jsdoc - Reads JSDoc annotated source code and generates an OpenAPI (Swagger) specification
+* swagger-ui-express - Serves auto-generated swagger-ui API docs hosted from API server
+When the vocab-builder application is running the docs are hosted on the /docs route, eg if running locally localhost:8000/docs
