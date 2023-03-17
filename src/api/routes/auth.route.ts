@@ -22,6 +22,7 @@ const router = express.Router();
  * /auth/register:
  *   post:
  *     summary: Creates a new user.
+ *     tags: ['auth']
  *     requestBody:
  *       required: true
  *       content:
@@ -73,6 +74,7 @@ router.post('/register', validate(createUserSchema), registerHandler);
  * /auth/login:
  *   post:
  *     summary: Request to log a user in
+ *     tags: ['auth']
  *     requestBody:
  *       required: true
  *       content:
@@ -118,6 +120,9 @@ router.post('/login', validate(loginUserSchema), loginHandler);
  * /auth/refresh:
  *   get:
  *     summary: Request a new access token
+ *     tags: ['auth']
+ *     security:
+ *       - cookieAuth: []
  *     responses:
  *       '200':
  *         description: Access token request successful.
@@ -147,6 +152,9 @@ router.use(deserializeUser, requireUser);
  * /auth/logout:
  *   get:
  *     summary: Log the current user out
+ *     tags: ['auth']
+ *     security:
+ *       - bearerAuth: []
  *     description: Terminates the current user session and removes refresh token from user cookies.
  *     responses:
  *       '200':

@@ -20,6 +20,26 @@ const swaggerDefinition = {
         description:
             'This is a REST API application made with Express. It provides an authentication service and CRUD operations for custom user flashcard decks.'
     },
+    components: {
+        securitySchemes: {
+            bearerAuth: {
+                type: 'http',
+                scheme: 'bearer',
+                bearerFormat: 'JWT'
+            },
+            cookieAuth: {
+                type: 'apiKey',
+                in: 'cookie',
+                name: 'refreshToken'
+            }
+        },
+        tags: [
+            {
+                name: 'auth',
+                description: 'User authentication service'
+            },
+        ]
+    },
     servers: [
         {
             url: 'http://localhost:8000',
