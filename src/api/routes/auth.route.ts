@@ -112,6 +112,32 @@ router.post('/register', validate(createUserSchema), registerHandler);
 router.post('/login', validate(loginUserSchema), loginHandler);
 
 //Refresh access token route
+
+/**
+ * @openapi
+ * /auth/refresh:
+ *   get:
+ *     summary: Request a new access token
+ *     responses:
+ *       '200':
+ *         description: Access token request successful.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     accessToken:
+ *                       type: string
+ *                       description: New JWT access token.
+ *       '403':
+ *         description: Couldn't return new access token - failed to validate refresh token, user doesn't have an active session or user doesn't exist.
+ *       '500':
+ *         description: Internal server error.
+ *         
+ */
 router.get('/refresh', refreshAccessTokenHandler);
 
 router.use(deserializeUser, requireUser);
@@ -121,10 +147,12 @@ router.use(deserializeUser, requireUser);
  * /auth/logout:
  *   get:
  *     summary: Log the current user out
- *     description: Terminates the current user session
+ *     description: Terminates the current user session and removes refresh token from user cookies.
  *     responses:
  *       '200':
- *         description: Logout successful
+ *         description: Logout successful.
+ *       '500':
+ *         description: Internal server error.
  */
 router.get('/logout', logoutHandler);
 

@@ -123,11 +123,7 @@ export const loginHandler = async (
 
 //TODO may need logout function here to clear cookies
 const logout = (res: Response) => {
-    // res.cookie('accessToken', '', { maxAge: 1 });
     res.cookie('refreshToken', '', { maxAge: 1 });
-    // res.cookie('logged_in', '', {
-    //     maxAge: 1
-    // })
 }
 
 /**
@@ -204,17 +200,12 @@ export const refreshAccessTokenHandler = async(
             expiresIn: `${config.get<number>('accessTokenExpiresIn')}m`
         });
 
-        // //Send the access token as cookie
-        // res.cookie('accessToken', accessToken, accessTokenCookieOptions);
-        // res.cookie('logged_in', true, {
-        //     ...accessTokenCookieOptions,
-        //     httpOnly: false,
-        // });
-
         //Send response
         res.status(200).json({
             status: 'success',
-            accessToken
+            data: {
+                accessToken
+            }
         });
     } catch (err: any) {
         next(err);
