@@ -13,8 +13,7 @@ import { DocumentType }                 from '@typegoose/typegoose';
 
 // CreateUser service
 export const createUser = async (input: Partial<User>) => {
-    const user = await userModel.create(input);
-    return omit(user.toJSON(), excludedFields);
+    return await userModel.create(input);
 };
 
 // Find User by Id
