@@ -1,5 +1,5 @@
 # NodeJS version
-FROM node:16.13.2
+FROM node:16.3.0-alpine
 
 # Create app directory
 WORKDIR /
