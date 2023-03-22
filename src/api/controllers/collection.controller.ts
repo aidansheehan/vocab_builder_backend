@@ -263,14 +263,14 @@ export const createCardHandler = async (
         const { _id: userId }   = user;         //Destructure user for id
         
         //Retrieve old collection
-        const oldCollection = await findCollectionById(collectionId)
+        const oldCollection = await findCollectionById(collectionId);
 
         //If collection doesn't exist
         if (!oldCollection) {
             return res.status(404).json({
                 status: 'fail',
                 message: 'This collection does not exist.'
-            })
+            });
         }
 
         //Check user ID matches collection user ID
@@ -278,7 +278,7 @@ export const createCardHandler = async (
             return res.status(403).json({
                 status: 'fail',
                 message: 'This collection belongs to someone else'
-            })
+            });
         }
 
         //Modify collection by adding new card
