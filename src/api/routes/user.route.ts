@@ -59,7 +59,7 @@ router.use(deserializeUser, requireUser);
  *                       description: Date user information last updated
  *                       example: 2023-03-16T18:55:00.591Z
  *       '401':
- *         description: User not logged in.
+ *         description: Authorization error - invalid token or user doesn't exist.
  *       '500':
  *         description: Internal server error.
  *                     

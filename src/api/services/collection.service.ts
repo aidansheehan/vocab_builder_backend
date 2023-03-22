@@ -53,8 +53,11 @@ export const createCard = async (collectionId: string, data: Card) => {
         throw new Error(`Collection with ID ${collectionId} not found.`);
     }
 
+    const fLexi     = data.lexi.toLowerCase().trim();       //Format lexi to lower case with no trailing whitespace
+    const fPrompt   = data.prompt.toLowerCase().trim();     //Format prompt to lower case with no trailing whitespace
+
     //Give the card an ID
-    const cardWithId = { ...data, "id": uuid() };
+    const cardWithId = { lexi: fLexi, prompt: fPrompt, "id": uuid() };
 
     //Add the card to the collection's array of cards
     collection.cards.push(cardWithId);

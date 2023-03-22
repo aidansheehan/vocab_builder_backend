@@ -34,6 +34,52 @@ const swaggerDefinition = {
                 name: 'refreshToken'
             }
         },
+        // TODO not working. Have a look into this solution https://github.com/chuve/swagger-multi-file-spec/blob/master/index.js
+        // schemas: {
+        //     'Card': {
+        //         type: 'object',
+        //         description: 'A single flashcard',
+        //         properties: {
+        //             lexi: {
+        //                 type: 'string',
+        //                 description: 'The lexical item to be memorized',
+        //                 example: 'Ek'
+        //             },
+        //             prompt: {
+        //                 type: 'string',
+        //                 description: 'A prompt to help the user remember the word',
+        //                 example: 'One'
+        //             },
+        //             id: {
+        //                 type: 'string',
+        //                 description: 'The card\'s unique ID',
+        //                 example: 'fd1c6dc2-db1e-4f32-b3b7-885c0c386ccafd1c6dc2-db1e-4f32-b3b7-885c0c386cca'
+        //             }
+        //         }
+        //     },
+        //     'Collection': {
+        //         type: 'object',
+        //         description: 'A collection of flashcards.',
+        //         properties: {
+        //             title: {
+        //                 type: 'string',
+        //                 description: 'The title of the collection',
+        //                 example: 'Numbers'
+        //             }, 
+        //             description: {
+        //                 type: 'string',
+        //                 description: 'A description of the collection',
+        //                 example: 'A collection about numbers.'
+        //             },
+        //             cards: {
+        //                 type: 'array',
+        //                 items: {
+        //                     type: "$ref '#/components/schemas/Card'"
+        //                 }
+        //             }
+        //         }
+        //     },
+        // },
         tags: [
             {
                 name: 'auth',
@@ -51,7 +97,7 @@ const swaggerDefinition = {
 
 const options = {
     swaggerDefinition,
-    apis: ['./src/api/routes/*.ts']
+    apis: [ './src/api/routes/*.ts']
 };
 
 const swaggerSpec = swaggerJSDoc(options);

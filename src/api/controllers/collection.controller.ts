@@ -29,9 +29,7 @@ export const createCollectionHandler = async (
 
         res.status(202).json({
             status: 'success',
-            data: {
-                collection,
-            },
+            data: collection,
         });
     } catch (err: any) {
 
@@ -67,9 +65,7 @@ export const findAllCollectionsHandler = async (
         
         res.status(202).json({
             status: 'success',
-            data: {
-                collections
-            }
+            data: collections
         });
     } catch (err: any) {
         next(err);
@@ -261,11 +257,29 @@ export const createCardHandler = async (
 ) => {
     try {
 
-        //TODO VBB-8: need to check this collection belongs to current user
-        // const { user }  = res.locals;   //Destructure res.locals
-        // const { _id }   = user;         //Destructure user for id
-
         const { collectionId } = req.params;    //Get collectionId from request params
+
+        const { user }          = res.locals;   //Destructure res.locals
+        const { _id: userId }   = user;         //Destructure user for id
+        
+        //Retrieve old collection
+        const oldCollection = await findCollectionById(collectionId)
+
+        //If collection doesn't exist
+        if (!oldCollection) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'This collection does not exist.'
+            })
+        }
+
+        //Check user ID matches collection user ID
+        if (oldCollection.user_id !== userId.toString()) {
+            return res.status(403).json({
+                status: 'fail',
+                message: 'This collection belongs to someone else'
+            })
+        }
 
         //Modify collection by adding new card
         const collection = await createCard(collectionId, req.body)
@@ -273,9 +287,7 @@ export const createCardHandler = async (
         //Return success and updated collection
         res.status(202).json({
             status: 'success',
-            data: {
-                collection
-            }
+            data: collection
         })
     }
 
@@ -297,7 +309,7 @@ export const updateCardHandler = async (
     try {
 
         const { user }          = res.locals;   //Destructure res.locals
-        const { _id: userId }   = user;         //Destructure user
+        const { _id: userId }   = user;         //Destructure user  
 
         const { collectionId }  = req.params;   //get collectionId from request params
         const { cardId }        = req.params;   //get cardId from request params
