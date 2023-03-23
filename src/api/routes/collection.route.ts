@@ -3,6 +3,7 @@ import { deserializeUser }                      from '../middleware/deserializeU
 import { requireUser }                          from '../middleware/requireUser';
 import { validate }                             from '../middleware/validate';
 import { cardSchema, collectionInfoSchema }     from '../schemas/collection.schema';
+import { checkCollection }                      from '../middleware/checkCollection';
 import { createCardHandler, 
     createCollectionHandler, 
     deleteAllCollectionsHandler, 
@@ -133,8 +134,6 @@ router.post('/', validate(collectionInfoSchema), createCollectionHandler);
  */
 router.get('/', findAllCollectionsHandler);
 
-//Retrieve a Single Collection with Id
-
 /**
  * @openapi
  * /collections/:collectionId:
@@ -192,13 +191,84 @@ router.get('/', findAllCollectionsHandler);
  *         description: Internal server error.
  *     
  */
-router.get('/:collectionId', findOneCollectionHandler);
+router.get('/:collectionId', checkCollection, findOneCollectionHandler);
 
 //Update a Collection (info) with Id
-router.put('/:collectionId', validate(collectionInfoSchema), updateCollectionHandler);
+/**
+ * @openapi
+ * /collections/:collectionId:
+ *   put:
+ *     summary: Update collection info
+ *     tags: ['collections']
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: The new title of the collection
+ *                 example: Numbers Edited
+ *               description:
+ *                 type: string
+ *                 description: Description of the collection
+ *                 example: An edited collection about numbers
+ *     responses:
+ *       '200':
+ *         description: Collection successfully updated.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   description: The collection ID
+ *                   example: 6418b35625139bec07239af9
+ *                 user_id:
+ *                   type: string
+ *                   description: The user ID
+ *                   example: 6418b11cea1ee958832591e1
+ *                 title:
+ *                   type: string
+ *                   description: The title of the collection
+ *                   example: Numbers Edited
+ *                 description:
+ *                   type: string
+ *                   description: A description of the collection
+ *                   example: An edited collection about numbers.
+ *                 cards:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       lexi:
+ *                         type: string
+ *                         description: The lexical item to be memorized
+ *                         example: Ek
+ *                       prompt: 
+ *                         type: string
+ *                         description: Prompt used to help the user remember their lexical item
+ *                         example: One
+ *                       id:
+ *                         type: string
+ *                         description: The id of the card
+ *                         example: fd1c6dc2-db1e-4f32-b3b7-885c0c386cca
+ *       '403':
+ *         description: This user is not authorized to access the collection with specified ID.
+ *       '404':
+ *         description: No collection with specified ID was found.
+ *       '500':
+ *         description: Internal server error.
+ */
+router.put('/:collectionId', checkCollection, validate(collectionInfoSchema), updateCollectionHandler);
 
 //Delete a collection with Id
-router.delete('/:collectionId', deleteCollectionHandler);
+router.delete('/:collectionId', checkCollection, deleteCollectionHandler);
 
 //Delete all user's collections
 router.delete('/', deleteAllCollectionsHandler);
@@ -275,12 +345,12 @@ router.delete('/', deleteAllCollectionsHandler);
  *       '500':
  *         description: Internal server error.
  */
-router.post('/:collectionId/cards', validate(cardSchema), createCardHandler);
+router.post('/:collectionId/cards', checkCollection, validate(cardSchema), createCardHandler);
 
 //Update a card in a collection
-router.put('/:collectionId/cards/:cardId', validate(cardSchema), updateCardHandler);
+router.put('/:collectionId/cards/:cardId', checkCollection, validate(cardSchema), updateCardHandler);
 
 //Delete a card from a collection
-router.delete('/:collectionId/cards/:cardId', deleteCardHandler);
+router.delete('/:collectionId/cards/:cardId', checkCollection, deleteCardHandler);
 
 export default router;

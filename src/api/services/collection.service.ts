@@ -1,5 +1,6 @@
 import collectionModel, { Card, Collection }    from "../models/collection.model";
 import { uuid }                                 from "uuidv4";
+import standardizeTextInput                     from "../helpers/standardize-text-input";
 
 /**
  * Collection service for communicating with the database
@@ -53,8 +54,8 @@ export const createCard = async (collectionId: string, data: Card) => {
         throw new Error(`Collection with ID ${collectionId} not found.`);
     }
 
-    const fLexi     = data.lexi.toLowerCase().trim();       //Format lexi to lower case with no trailing whitespace
-    const fPrompt   = data.prompt.toLowerCase().trim();     //Format prompt to lower case with no trailing whitespace
+    const fLexi     = standardizeTextInput(data.lexi);      //Format lexi to lower case with no trailing whitespace
+    const fPrompt   = standardizeTextInput(data.prompt);    //Format prompt to lower case with no trailing whitespace
 
     //Give the card an ID
     const cardWithId = { lexi: fLexi, prompt: fPrompt, "id": uuid() };
@@ -72,7 +73,7 @@ export const createCard = async (collectionId: string, data: Card) => {
 //Service to update an existing card in a collection
 export const updateCard = async (collectionId: string, cardId: string, data: Card) => {
 
-    //Find the collection by its ID
+    //Find the collection by its ID TODO remove this logic or always do this check here VBB-8
     const collection = await collectionModel.findById(collectionId);
 
     //Check if the collection exists
@@ -80,8 +81,11 @@ export const updateCard = async (collectionId: string, cardId: string, data: Car
         throw new Error(`Collection with ID ${collectionId} not found.`);
     }
 
+    const fLexi     = standardizeTextInput(data.lexi);      //Format lexi to lower case with no trailing whitespace
+    const fPrompt   = standardizeTextInput(data.prompt);    //Format prompt to lower case with no trailing whitespace
+
     //Construct card with ID
-    const cardWithId = { ...data, id: cardId }
+    const cardWithId = { lexi: fLexi, prompt: fPrompt, id: cardId }
 
     //Find the card TODO should refactor by indexing array VBB-8
     const newCards = collection.cards.map(c_ => {

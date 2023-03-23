@@ -82,46 +82,17 @@ export const findOneCollectionHandler = async (
 ) => {
     try {
 
-        const { user }          = res.locals    //Destructure res.locals
-        const { _id: userId }   = user;         //Destructure user
-
         const { collectionId } = req.params; //Get collection id from request params
 
         //Retrieve collection
         const collection = await findCollectionById(collectionId);
-
-        //If collection not found
-        if (!collection) {
-
-            //Return error
-            return res.status(404).json({
-                status: 'fail',
-                message: 'A collection with this ID wasn\'t found'
-            });
-
-        }
-
-        //Check collection belongs to this user
-        if (collection.user_id !== userId.toString()) {
-
-            //If user doesn't own collection return authorization error
-            return res.status(403).json({
-                status: 'failed',
-                data: {
-                    error: 'This user is not authorized to access this collection'
-                }
-            });
-        }
-
-        //If collection belongs to this user
-        else {
             
-            //Return collection to the user
-            res.status(202).json({
-                status: 'success',
-                data: collection
-            });
-        }
+        //Return collection to the user
+        res.status(202).json({
+            status: 'success',
+            data: collection
+        });
+
     } catch (err: any) {
         next(err);
     }
@@ -137,40 +108,19 @@ export const updateCollectionHandler = async (
 ) => {
     try {
 
-        const { user }          = res.locals;   //Destructure res.locals
-        const { _id: userId }   = user;         //Destructure user
-
         const { collectionId } = req.params;    //Get collectionId from request params
 
-        //Retrieve collection
-        const collection = await findCollectionById(collectionId);
+        //Update collection with new data
+        await updateCollectionById(req.body, collectionId);
 
-        //Check collection belongs to this user
-        if (collection?.user_id !== userId.toString()) {
+        //Retrieve updated collection from DB TODO i'm not sure if this will always wait for DB to be updated?
+        const newCollection = await findCollectionById(collectionId);
 
-            //If user doesn't own collection return authorization error
-            res.status(401).json({
-                status: 'failed',
-                data: {
-                    error: 'This user is not authorized to access this collection'
-                }
-            });
-        }
+        res.status(200).json({
+            status: 'success',
+            data: newCollection
+        });
 
-        //If collection belongs to this user
-        else {
-
-            //Update collection with new data
-            await updateCollectionById(req.body, collectionId);
-
-            //Retrieve updated collection from DB TODO i'm not sure if this will always wait for DB to be updated?
-            const newCollection = await findCollectionById(collectionId);
-
-            res.status(202).json({
-                status: 'success',
-                data: newCollection
-            });
-        }
     } catch (err: any) {
         next(err);
     }
@@ -186,37 +136,17 @@ export const deleteCollectionHandler = async (
 ) => {
     try {
 
-        const { user }          = res.locals;   //Destructure res.locals
-        const { _id: userId }   = user;         //Destructure user
-
         const { collectionId } = req.params;    //Get collectionId from request params
 
-        //Retrieve collection
-        const collection = await findCollectionById(collectionId);
+        //Delete collection
+        await deleteCollectionById(collectionId);
 
-        //Check collection belongs to this user
-        if (collection?.user_id !== userId.toString()) {
+        //Return success and deleted collection ID
+        res.status(202).json({
+            status: 'success',
+            _id: collectionId
+        });
 
-            //If user doesn't own collection return authorization error
-            res.status(401).json({
-                status: 'failed',
-                data: {
-                    error: 'This user is not authorized to access this collection'
-                }
-            });
-        }
-
-        //If collection belongs to this user
-        else {
-
-            //Delete collection
-            await deleteCollectionById(collectionId);
-
-            res.status(202).json({
-                status: 'success',
-                _id: collectionId
-            });
-        }
     } catch (err: any) {
         next(err);
     }
@@ -268,28 +198,6 @@ export const createCardHandler = async (
 
         const { collectionId } = req.params;    //Get collectionId from request params
 
-        const { user }          = res.locals;   //Destructure res.locals
-        const { _id: userId }   = user;         //Destructure user for id
-        
-        //Retrieve old collection
-        const oldCollection = await findCollectionById(collectionId);
-
-        //If collection doesn't exist
-        if (!oldCollection) {
-            return res.status(404).json({
-                status: 'fail',
-                message: 'This collection does not exist.'
-            });
-        }
-
-        //Check user ID matches collection user ID
-        if (oldCollection.user_id !== userId.toString()) {
-            return res.status(403).json({
-                status: 'fail',
-                message: 'This collection belongs to someone else'
-            });
-        }
-
         //Modify collection by adding new card
         const collection = await createCard(collectionId, req.body)
 
@@ -297,7 +205,8 @@ export const createCardHandler = async (
         res.status(202).json({
             status: 'success',
             data: collection
-        })
+        });
+
     }
 
     catch (err: any) {
@@ -317,44 +226,19 @@ export const updateCardHandler = async (
 
     try {
 
-        const { user }          = res.locals;   //Destructure res.locals
-        const { _id: userId }   = user;         //Destructure user  
-
         const { collectionId }  = req.params;   //get collectionId from request params
         const { cardId }        = req.params;   //get cardId from request params
 
-        //Retrieve collection
-        const collection = await findCollectionById(collectionId);
+        //Update collection with updated card
+        const newCollection = await updateCard(collectionId, cardId, req.body);
 
-        //Check collection belongs to this user TODO what if collection doesn't exist VBB-8
-        if (collection?.user_id !== userId.toString()) {
-
-            //If user doesn't own collection return authorization error
-            res.status(401).json({
-                status: 'failed',
-                data: {
-                    error: 'This user is not authorized to access this collection'
-                }
-            })
-        }
-
-        //If collection belongs to this user
-        else {
-
-            //Update collection with updated card
-            const newCollection = await updateCard(collectionId, cardId, req.body);
-
-            //Return success and updated collection
-            res.status(202).json({
-                status: 'success',
-                data: {
-                    collection: newCollection
-                }
-            })
-
-            
-        }
-
+        //Return success and updated collection
+        res.status(202).json({
+            status: 'success',
+            data: {
+                collection: newCollection
+            }
+        });
         
     } catch (err: any) {
         next(err);
@@ -372,41 +256,22 @@ export const deleteCardHandler = async (
 
     try {
 
-        const { user }          = res.locals;   //Destructure res.locals
-        const { _id: userId }   = user;         //Destructure user
-
         const { collectionId }  = req.params;   //Get collectionId from request params
         const { cardId }        = req.params;   //Get cardId from request params
 
-        //Retrieve collection
-        const collection = await findCollectionById(collectionId);
 
-        //Check collection belongs to this user
-        if (collection?.user_id !== userId.toString()) {
 
-            //If user doesn't own collection return authorization error
-            res.status(401).json({
-                status: 'failed',
-                data: {
-                    error: 'This user is not authorized to access this collection'
-                }
-            });
-        }
+        //Delete card and return modified collection object
+        const newCollection = await deleteCard(collectionId, cardId);
 
-        //If collection belongs to this user
-        else {
+        //Return success and updated collection
+        res.status(202).json({
+            status: 'success',
+            data: {
+                collection: newCollection
+            }
+        });
 
-            //Delete card and return modified collection object
-            const newCollection = await deleteCard(collectionId, cardId);
-
-            //Return success and updated collection
-            res.status(202).json({
-                status: 'success',
-                data: {
-                    collection: newCollection
-                }
-            })
-        }
     } catch (err: any) {
         next(err);
     }
