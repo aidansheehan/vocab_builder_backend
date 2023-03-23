@@ -13,15 +13,9 @@ import { createCardHandler,
     updateCardHandler, 
     updateCollectionHandler }                   from '../controllers/collection.controller';
 
-/**
- * Routes to:
- *  - Create a collection
- */
-
 const router = express.Router();
 router.use(deserializeUser, requireUser);
 
-//Create a New Collection (info)
 /**
  * @openapi
  * /collections:
@@ -29,7 +23,7 @@ router.use(deserializeUser, requireUser);
  *     summary: Create a new collection.
  *     tags: ['collections']
  *     security:
- *       - cookieAuth: []
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -78,7 +72,6 @@ router.use(deserializeUser, requireUser);
  *       '500':
  *         description: Internal server error.
  */
-
 router.post('/', validate(collectionInfoSchema), createCollectionHandler);
 
 /**
@@ -88,7 +81,7 @@ router.post('/', validate(collectionInfoSchema), createCollectionHandler);
  *     summary: Retrieve all of a user's collections.
  *     tags: ['collections']
  *     security:
- *       - cookieAuth: []
+ *       - bearerAuth: []
  *     responses:
  *       '202':
  *         description: Successfully retrieved user's collections.
@@ -141,6 +134,64 @@ router.post('/', validate(collectionInfoSchema), createCollectionHandler);
 router.get('/', findAllCollectionsHandler);
 
 //Retrieve a Single Collection with Id
+
+/**
+ * @openapi
+ * /collections/:collectionId:
+ *   get:
+ *     summary: Retrieves a single collection by ID
+ *     tags: ['collections']
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '202':
+ *         description: Collection successfully retrieved.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   description: The collection ID
+ *                   example: 6418b35625139bec07239af9
+ *                 user_id:
+ *                   type: string
+ *                   description: The user ID
+ *                   example: 6418b11cea1ee958832591e1
+ *                 title:
+ *                   type: string
+ *                   description: The title of the collection
+ *                   example: Numbers
+ *                 description:
+ *                   type: string
+ *                   description: A description of the collection
+ *                   example: A collection about numbers.
+ *                 cards:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       lexi:
+ *                         type: string
+ *                         description: The lexical item to be memorized
+ *                         example: Ek
+ *                       prompt: 
+ *                         type: string
+ *                         description: Prompt used to help the user remember their lexical item
+ *                         example: One
+ *                       id:
+ *                         type: string
+ *                         description: The id of the card
+ *                         example: fd1c6dc2-db1e-4f32-b3b7-885c0c386cca
+ *       '403':
+ *         description: This user is not authorized to access the collection with specified ID.
+ *       '404':
+ *         description: No collection with specified ID was found.
+ *       '500':
+ *         description: Internal server error.
+ *     
+ */
 router.get('/:collectionId', findOneCollectionHandler);
 
 //Update a Collection (info) with Id

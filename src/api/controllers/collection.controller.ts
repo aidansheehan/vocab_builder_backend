@@ -90,11 +90,22 @@ export const findOneCollectionHandler = async (
         //Retrieve collection
         const collection = await findCollectionById(collectionId);
 
+        //If collection not found
+        if (!collection) {
+
+            //Return error
+            return res.status(404).json({
+                status: 'fail',
+                message: 'A collection with this ID wasn\'t found'
+            });
+
+        }
+
         //Check collection belongs to this user
-        if (collection?.user_id !== userId.toString()) {
+        if (collection.user_id !== userId.toString()) {
 
             //If user doesn't own collection return authorization error
-            res.status(401).json({
+            return res.status(403).json({
                 status: 'failed',
                 data: {
                     error: 'This user is not authorized to access this collection'
@@ -108,9 +119,7 @@ export const findOneCollectionHandler = async (
             //Return collection to the user
             res.status(202).json({
                 status: 'success',
-                data: {
-                    collection
-                }
+                data: collection
             });
         }
     } catch (err: any) {
