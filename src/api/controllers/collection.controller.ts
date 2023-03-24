@@ -27,7 +27,7 @@ export const createCollectionHandler = async (
         //Create a collection with the specified data
         const collection = await createCollection(req.body, _id);
 
-        res.status(202).json({
+        res.status(200).json({
             status: 'success',
             data: collection,
         });
@@ -63,7 +63,7 @@ export const findAllCollectionsHandler = async (
         //Get collections TODO implement condition
         const collections = await findAllCollections(_id, title);
         
-        res.status(202).json({
+        res.status(200).json({
             status: 'success',
             data: collections
         });
@@ -88,7 +88,7 @@ export const findOneCollectionHandler = async (
         const collection = await findCollectionById(collectionId);
             
         //Return collection to the user
-        res.status(202).json({
+        res.status(200).json({
             status: 'success',
             data: collection
         });
@@ -142,7 +142,7 @@ export const deleteCollectionHandler = async (
         await deleteCollectionById(collectionId);
 
         //Return success and deleted collection ID
-        res.status(202).json({
+        res.status(200).json({
             status: 'success',
             _id: collectionId
         });
@@ -202,7 +202,7 @@ export const createCardHandler = async (
         const collection = await createCard(collectionId, req.body)
 
         //Return success and updated collection
-        res.status(202).json({
+        res.status(200).json({
             status: 'success',
             data: collection
         });
@@ -233,7 +233,7 @@ export const updateCardHandler = async (
         const newCollection = await updateCard(collectionId, cardId, req.body);
 
         //Return success and updated collection
-        res.status(202).json({
+        res.status(200).json({
             status: 'success',
             data: {
                 collection: newCollection
@@ -265,7 +265,7 @@ export const deleteCardHandler = async (
         const newCollection = await deleteCard(collectionId, cardId);
 
         //Return success and updated collection
-        res.status(202).json({
+        res.status(200).json({
             status: 'success',
             data: {
                 collection: newCollection

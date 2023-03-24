@@ -41,7 +41,7 @@ router.use(deserializeUser, requireUser);
  *                 description: Description for the new collection
  *                 example: A collection about numbers.
  *     responses:
- *       '202':
+ *       '200':
  *         description: The collection was successfully created.
  *         content:
  *           application/json:
@@ -84,7 +84,7 @@ router.post('/', validate(collectionInfoSchema), createCollectionHandler);
  *     security:
  *       - bearerAuth: []
  *     responses:
- *       '202':
+ *       '200':
  *         description: Successfully retrieved user's collections.
  *         content:
  *           application/json:
@@ -130,20 +130,26 @@ router.post('/', validate(collectionInfoSchema), createCollectionHandler);
  *         description: Unauthorized (invalid token or user doesn't exist)
  *       '500':
  *         description: Internal server error.
- *     
  */
 router.get('/', findAllCollectionsHandler);
 
 /**
  * @openapi
- * /collections/:collectionId:
+ * /collections/{collectionId}:
  *   get:
  *     summary: Retrieves a single collection by ID
  *     tags: ['collections']
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: collectionId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the collection to be retrieved
  *     responses:
- *       '202':
+ *       '200':
  *         description: Collection successfully retrieved.
  *         content:
  *           application/json:
@@ -183,6 +189,8 @@ router.get('/', findAllCollectionsHandler);
  *                         type: string
  *                         description: The id of the card
  *                         example: fd1c6dc2-db1e-4f32-b3b7-885c0c386cca
+ *       '401':
+ *         description: Invalid token or user doesn't exist.
  *       '403':
  *         description: This user is not authorized to access the collection with specified ID.
  *       '404':
@@ -193,15 +201,21 @@ router.get('/', findAllCollectionsHandler);
  */
 router.get('/:collectionId', checkCollection, findOneCollectionHandler);
 
-//Update a Collection (info) with Id
 /**
  * @openapi
- * /collections/:collectionId:
+ * /collections/{collectionId}:
  *   put:
  *     summary: Update collection info
  *     tags: ['collections']
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: collectionId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the collection to be updated
  *     requestBody:
  *       required: true
  *       content:
@@ -258,6 +272,8 @@ router.get('/:collectionId', checkCollection, findOneCollectionHandler);
  *                         type: string
  *                         description: The id of the card
  *                         example: fd1c6dc2-db1e-4f32-b3b7-885c0c386cca
+ *       '401':
+ *         description: Invalid token or user doesn't exist.
  *       '403':
  *         description: This user is not authorized to access the collection with specified ID.
  *       '404':
@@ -267,21 +283,62 @@ router.get('/:collectionId', checkCollection, findOneCollectionHandler);
  */
 router.put('/:collectionId', checkCollection, validate(collectionInfoSchema), updateCollectionHandler);
 
-//Delete a collection with Id
-router.delete('/:collectionId', checkCollection, deleteCollectionHandler);
-
-//Delete all user's collections
-router.delete('/', deleteAllCollectionsHandler);
-
-//Create a new card in a collection
 /**
  * @openapi
- * /collections/:collectionId/cards:
+ * /collections/{collectionId}:
+ *   delete:
+ *     summary: Delete a collection by ID
+ *     tags: ['collections']
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: collectionId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the collection to be deleted.
+ *     responses:
+ *       '200':
+ *         description: Collection successfully deleted.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   description: The ID of the collection that was deleted
+ *                   example: 6418b35625139bec07239af9
+ *       '401':
+ *         description: Invalid token or user doesn't exist.
+ *       '403':
+ *         description: This user is not authorized to access the collection with specified ID.
+ *       '404':
+ *         description: No collection with specified ID was found.
+ *       '500':
+ *         description: Internal server error.
+ */
+router.delete('/:collectionId', checkCollection, deleteCollectionHandler);
+
+//Delete all user's collections TBD
+// router.delete('/', deleteAllCollectionsHandler);
+
+/**
+ * @openapi
+ * /collections/{collectionId}/cards:
  *   post:
  *     summary: Create a new card in a collection
  *     tags: ['collections']
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: collectionId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the collection to create a new card in.
  *     requestBody:
  *       required: true
  *       content:
@@ -296,7 +353,7 @@ router.delete('/', deleteAllCollectionsHandler);
  *                 type: string
  *                 description: A prompt to help the user remember the lexical item.
  *     responses:
- *       '202':
+ *       '200':
  *         description: Request to create a new card in collection successful. Returns the whole updated collection.
  *         content:
  *           application/json:
@@ -347,10 +404,166 @@ router.delete('/', deleteAllCollectionsHandler);
  */
 router.post('/:collectionId/cards', checkCollection, validate(cardSchema), createCardHandler);
 
-//Update a card in a collection
+/**
+ * @openapi
+ * /collections/{collectionId}/cards/{cardId}:
+ *   put:
+ *     summary: Update a card in a collection
+ *     tags: ['collections']
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: collectionId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the collection to update a card in
+ *       - in: path
+ *         name: cardId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the card to be updated
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               lexi:
+ *                 type: string
+ *                 description: The lexical item to be memorized.
+ *                 example: Do
+ *               prompt:
+ *                 type: string
+ *                 description: A prompt to help the user remember the lexical item.
+ *                 example: Two
+ *     responses:
+ *       '200':
+ *         description: Request to update card successful. Returns the whole updated collection.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   description: The collection ID
+ *                   example: 6418b35625139bec07239af9
+ *                 user_id:
+ *                   type: string
+ *                   description: The user ID
+ *                   example: 6418b11cea1ee958832591e1
+ *                 title:
+ *                   type: string
+ *                   description: The title of the collection
+ *                   example: Numbers
+ *                 description:
+ *                   type: string
+ *                   description: A description of the collection
+ *                   example: A collection about numbers.
+ *                 cards:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       lexi:
+ *                         type: string
+ *                         description: The lexical item to be memorized
+ *                         example: Do
+ *                       prompt: 
+ *                         type: string
+ *                         description: Prompt used to help the user remember their lexical item
+ *                         example: Two
+ *                       id:
+ *                         type: string
+ *                         description: The id of the card
+ *                         example: fd1c6dc2-db1e-4f32-b3b7-885c0c386cca
+ *       '401':
+ *         description: Invalid token or the user doesn't exist.
+ *       '403':
+ *         description: This collection belongs to someone else.
+ *       '404':
+ *         description: This collection does not exist or couldn't be found.
+ *       '500':
+ *         description: Internal server error.
+ */
+
 router.put('/:collectionId/cards/:cardId', checkCollection, validate(cardSchema), updateCardHandler);
 
-//Delete a card from a collection
+/**
+ * @openapi
+ * /collections/{collectionId}/cards/{cardId}:
+ *   delete:
+ *     summary: Delete a card from a collection. Returns the updated collection
+ *     tags: ['collections']
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: collectionId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the collection to delete a card from
+ *       - in: path
+ *         name: cardId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the card to be deleted
+ *     responses:
+ *       '200':
+ *         description: Card successfully deleted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   description: The collection ID
+ *                   example: 6418b35625139bec07239af9
+ *                 user_id:
+ *                   type: string
+ *                   description: The user ID
+ *                   example: 6418b11cea1ee958832591e1
+ *                 title:
+ *                   type: string
+ *                   description: The title of the collection
+ *                   example: Numbers
+ *                 description:
+ *                   type: string
+ *                   description: A description of the collection
+ *                   example: A collection about numbers.
+ *                 cards:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       lexi:
+ *                         type: string
+ *                         description: The lexical item to be memorized
+ *                         example: Ek
+ *                       prompt: 
+ *                         type: string
+ *                         description: Prompt used to help the user remember their lexical item
+ *                         example: One
+ *                       id:
+ *                         type: string
+ *                         description: The id of the card
+ *                         example: fd1c6dc2-db1e-4f32-b3b7-885c0c386cca
+ *       '401':
+ *         description: Invalid token or the user doesn't exist.
+ *       '403':
+ *         description: This user is not authorized to access the specified collection.
+ *       '404':
+ *         description: A collection with this ID wasn't found.
+ *       '500':
+ *         description: Internal server error.
+ */
 router.delete('/:collectionId/cards/:cardId', checkCollection, deleteCardHandler);
 
 export default router;
