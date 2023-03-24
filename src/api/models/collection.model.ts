@@ -37,6 +37,15 @@ export class Collection {
 
 }
 
+//Export the collection info class to be used as a typescript type
+export class CollectionInfo {
+    @prop()
+    title: string;
+
+    @prop()
+    description: string;
+}
+
 //Create the colection model from the Collection class
 const collectionModel = getModelForClass(Collection);
 

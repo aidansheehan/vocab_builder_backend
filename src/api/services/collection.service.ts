@@ -1,16 +1,19 @@
-import collectionModel, { Card, Collection }    from "../models/collection.model";
-import { uuid }                                 from "uuidv4";
-import standardizeTextInput                     from "../helpers/standardize-text-input";
+import collectionModel, { Card, Collection, CollectionInfo }    from "../models/collection.model";
+import { uuid }                                                 from "uuidv4";
+import standardizeTextInput                                     from "../helpers/standardize-text-input";
 
 /**
  * Collection service for communicating with the database
  */
 
 // createCollection service
-export const createCollection = async (data: Partial<Collection>, user_id: string) => {
+export const createCollection = async (data: CollectionInfo, user_id: string) => {
 
-    //TODO may need excluded fields here - what does FE need returned
-    const dataWithId = { ...data, "user_id": user_id }
+    const fTitle        = standardizeTextInput(data.title);         //Format title
+    const fDescription  = standardizeTextInput(data.description)    //Format description
+
+    //Construct formatted collection data with ID
+    const dataWithId = { title: fTitle, description: fDescription, "user_id": user_id }
 
     const collection = await collectionModel.create(dataWithId);
     return collection.toJSON();
@@ -31,10 +34,16 @@ export const findCollectionById = async (id: string) => {
 }
 
 // Update a collection by it's ID
-export const updateCollectionById = async (data: Partial<Collection>, id: string) => {
+export const updateCollectionById = async (data: CollectionInfo, id: string) => {
+
+    const fTitle        = standardizeTextInput(data.title);         //Format title
+    const fDescription  = standardizeTextInput(data.description);   //Format description
+
+    //Construct formatted data object
+    const fData = { title: fTitle, description: fDescription };
 
     //TODO investigate prob need options here to prevent overwrite of collection id, may be other probs like wrong type
-    return await collectionModel.findByIdAndUpdate(id, data);
+    return await collectionModel.findByIdAndUpdate(id, fData);
 
 }
 
@@ -49,7 +58,7 @@ export const createCard = async (collectionId: string, data: Card) => {
     //Find the collection by its ID
     const collection = await collectionModel.findById(collectionId);
 
-    //Check if the collection exists
+    //Check if the collection exists TODO remove or standardize VBB-8
     if (!collection) {
         throw new Error(`Collection with ID ${collectionId} not found.`);
     }
@@ -76,7 +85,7 @@ export const updateCard = async (collectionId: string, cardId: string, data: Car
     //Find the collection by its ID TODO remove this logic or always do this check here VBB-8
     const collection = await collectionModel.findById(collectionId);
 
-    //Check if the collection exists
+    //Check if the collection exists TODO remove or standardize VBB-8
     if (!collection) {
         throw new Error(`Collection with ID ${collectionId} not found.`);
     }
