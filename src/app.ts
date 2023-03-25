@@ -126,7 +126,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/collections', collectionRouter);
 
 //6. Documentation with Swagger and JSDoc
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 //Testing
 app.get('/healthChecker', (req: Request, res: Response, next: NextFunction) => {
