@@ -6,7 +6,7 @@ export class Card {
     lexi: string;
 
     @prop({required: true})
-    prompt: string;
+    textPrompt: string;
 }
 
 //Export the card with generated ID class to be used as Typescript type
@@ -15,7 +15,7 @@ export class CardWithId {
     lexi: string;
 
     @prop({required: true})
-    prompt: string;
+    textPrompt: string;
 
     @prop({required: true})
     id: string

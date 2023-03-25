@@ -64,10 +64,10 @@ export const createCard = async (collectionId: string, data: Card) => {
     }
 
     const fLexi     = standardizeTextInput(data.lexi);      //Format lexi to lower case with no trailing whitespace
-    const fPrompt   = standardizeTextInput(data.prompt);    //Format prompt to lower case with no trailing whitespace
+    const fTextPrompt   = standardizeTextInput(data.textPrompt);    //Format textPrompt to lower case with no trailing whitespace
 
     //Give the card an ID
-    const cardWithId = { lexi: fLexi, prompt: fPrompt, "id": uuid() };
+    const cardWithId = { lexi: fLexi, textPrompt: fTextPrompt, "id": uuid() };
 
     //Add the card to the collection's array of cards
     collection.cards.push(cardWithId);
@@ -91,10 +91,10 @@ export const updateCard = async (collectionId: string, cardId: string, data: Car
     }
 
     const fLexi     = standardizeTextInput(data.lexi);      //Format lexi to lower case with no trailing whitespace
-    const fPrompt   = standardizeTextInput(data.prompt);    //Format prompt to lower case with no trailing whitespace
+    const fTextPrompt   = standardizeTextInput(data.textPrompt);    //Format textPrompt to lower case with no trailing whitespace
 
     //Construct card with ID
-    const cardWithId = { lexi: fLexi, prompt: fPrompt, id: cardId }
+    const cardWithId = { lexi: fLexi, textPrompt: fTextPrompt, id: cardId }
 
     //Find the card TODO should refactor by indexing array VBB-8
     const newCards = collection.cards.map(c_ => {

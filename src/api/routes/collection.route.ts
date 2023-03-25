@@ -118,9 +118,9 @@ router.post('/', validate(collectionInfoSchema), createCollectionHandler);
  *                           type: string
  *                           description: The lexical item to be memorized
  *                           example: Ek
- *                         prompt: 
+ *                         textPrompt: 
  *                           type: string
- *                           description: Prompt used to help the user remember their lexical item
+ *                           description: Text prompt used to help the user remember their lexical item
  *                           example: One
  *                         id:
  *                           type: string
@@ -181,9 +181,9 @@ router.get('/', findAllCollectionsHandler);
  *                         type: string
  *                         description: The lexical item to be memorized
  *                         example: Ek
- *                       prompt: 
+ *                       textPrompt: 
  *                         type: string
- *                         description: Prompt used to help the user remember their lexical item
+ *                         description: Text prompt used to help the user remember their lexical item
  *                         example: One
  *                       id:
  *                         type: string
@@ -264,9 +264,9 @@ router.get('/:collectionId', checkCollection, findOneCollectionHandler);
  *                         type: string
  *                         description: The lexical item to be memorized
  *                         example: Ek
- *                       prompt: 
+ *                       textPrompt: 
  *                         type: string
- *                         description: Prompt used to help the user remember their lexical item
+ *                         description: Text prompt used to help the user remember their lexical item
  *                         example: One
  *                       id:
  *                         type: string
@@ -349,9 +349,9 @@ router.delete('/:collectionId', checkCollection, deleteCollectionHandler);
  *               lexi:
  *                 type: string
  *                 description: The lexical item to be memorized.
- *               prompt:
+ *               textPrompt:
  *                 type: string
- *                 description: A prompt to help the user remember the lexical item.
+ *                 description: A textPrompt to help the user remember the lexical item.
  *     responses:
  *       '200':
  *         description: Request to create a new card in collection successful. Returns the whole updated collection.
@@ -385,9 +385,9 @@ router.delete('/:collectionId', checkCollection, deleteCollectionHandler);
  *                         type: string
  *                         description: The lexical item to be memorized
  *                         example: Ek
- *                       prompt: 
+ *                       textPrompt: 
  *                         type: string
- *                         description: Prompt used to help the user remember their lexical item
+ *                         description: Text prompt used to help the user remember their lexical item
  *                         example: One
  *                       id:
  *                         type: string
@@ -436,9 +436,9 @@ router.post('/:collectionId/cards', checkCollection, validate(cardSchema), creat
  *                 type: string
  *                 description: The lexical item to be memorized.
  *                 example: Do
- *               prompt:
+ *               textPrompt:
  *                 type: string
- *                 description: A prompt to help the user remember the lexical item.
+ *                 description: A textPrompt to help the user remember the lexical item.
  *                 example: Two
  *     responses:
  *       '200':
@@ -473,9 +473,9 @@ router.post('/:collectionId/cards', checkCollection, validate(cardSchema), creat
  *                         type: string
  *                         description: The lexical item to be memorized
  *                         example: Do
- *                       prompt: 
+ *                       textPrompt: 
  *                         type: string
- *                         description: Prompt used to help the user remember their lexical item
+ *                         description: Text prompt used to help the user remember their lexical item
  *                         example: Two
  *                       id:
  *                         type: string
@@ -547,9 +547,9 @@ router.put('/:collectionId/cards/:cardId', checkCollection, validate(cardSchema)
  *                         type: string
  *                         description: The lexical item to be memorized
  *                         example: Ek
- *                       prompt: 
+ *                       textPrompt: 
  *                         type: string
- *                         description: Prompt used to help the user remember their lexical item
+ *                         description: Text prompt used to help the user remember their lexical item
  *                         example: One
  *                       id:
  *                         type: string
