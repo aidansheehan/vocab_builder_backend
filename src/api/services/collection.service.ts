@@ -1,6 +1,6 @@
-import collectionModel, { Card, Collection, CollectionInfo }    from "../models/collection.model";
+import collectionModel, { Card, CollectionInfo }                from "../models/collection.model";
 import { uuid }                                                 from "uuidv4";
-import standardizeTextInput                                     from "../helpers/standardize-text-input";
+import { standardizeTextInput, titleCase, sentenceCase }        from "../helpers/formatText";
 
 /**
  * Collection service for communicating with the database
@@ -9,8 +9,8 @@ import standardizeTextInput                                     from "../helpers
 // createCollection service
 export const createCollection = async (data: CollectionInfo, user_id: string) => {
 
-    const fTitle        = standardizeTextInput(data.title);         //Format title
-    const fDescription  = standardizeTextInput(data.description)    //Format description
+    const fTitle        = titleCase(data.title);            //Format title
+    const fDescription  = sentenceCase(data.description);   //Format description
 
     //Construct formatted collection data with ID
     const dataWithId = { title: fTitle, description: fDescription, "user_id": user_id }
@@ -36,8 +36,8 @@ export const findCollectionById = async (id: string) => {
 // Update a collection by it's ID
 export const updateCollectionById = async (data: CollectionInfo, id: string) => {
 
-    const fTitle        = standardizeTextInput(data.title);         //Format title
-    const fDescription  = standardizeTextInput(data.description);   //Format description
+    const fTitle        = titleCase(data.title);            //Format title
+    const fDescription  = sentenceCase(data.description);   //Format description
 
     //Construct formatted data object
     const fData = { title: fTitle, description: fDescription };
@@ -63,7 +63,7 @@ export const createCard = async (collectionId: string, data: Card) => {
         throw new Error(`Collection with ID ${collectionId} not found.`);
     }
 
-    const fLexi     = standardizeTextInput(data.lexi);      //Format lexi to lower case with no trailing whitespace
+    const fLexi         = standardizeTextInput(data.lexi);          //Format lexi to lower case with no trailing whitespace
     const fTextPrompt   = standardizeTextInput(data.textPrompt);    //Format textPrompt to lower case with no trailing whitespace
 
     //Give the card an ID
@@ -90,7 +90,7 @@ export const updateCard = async (collectionId: string, cardId: string, data: Car
         throw new Error(`Collection with ID ${collectionId} not found.`);
     }
 
-    const fLexi     = standardizeTextInput(data.lexi);      //Format lexi to lower case with no trailing whitespace
+    const fLexi         = standardizeTextInput(data.lexi);      //Format lexi to lower case with no trailing whitespace
     const fTextPrompt   = standardizeTextInput(data.textPrompt);    //Format textPrompt to lower case with no trailing whitespace
 
     //Construct card with ID
