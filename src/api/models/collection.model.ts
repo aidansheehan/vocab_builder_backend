@@ -1,4 +1,4 @@
-import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose";
+import { getModelForClass, prop } from '@typegoose/typegoose';
 
 //Export the card class to be used as Typescript type
 export class Card {

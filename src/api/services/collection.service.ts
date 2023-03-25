@@ -1,6 +1,6 @@
-import collectionModel, { Card, CollectionInfo }                from "../models/collection.model";
-import { uuid }                                                 from "uuidv4";
-import { standardizeTextInput, titleCase, sentenceCase }        from "../helpers/formatText";
+import collectionModel, { Card, CollectionInfo }                from '../models/collection.model';
+import { uuid }                                                 from 'uuidv4';
+import { standardizeTextInput, titleCase, sentenceCase }        from '../helpers/formatText';
 
 /**
  * Collection service for communicating with the database

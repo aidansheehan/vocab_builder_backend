@@ -1,4 +1,4 @@
-import _                    from 'lodash';
+import _ from 'lodash';
 
 /**
  * Function to standardize text input by removing trailing whitespace and converting all characters to lower case.

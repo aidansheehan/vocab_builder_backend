@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import { findCollectionById } from "../services/collection.service";
+import { NextFunction, Request, Response }  from 'express';
+import { findCollectionById }               from '../services/collection.service';
 
 /**
  * Middleware to check if collection doesn't exist or doesn't belong to current user and return appropraite errors if so

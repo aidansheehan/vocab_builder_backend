@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response }          from "express";
-import { CardInput, CollectionInput }               from "../schemas/collection.schema";
+import { NextFunction, Request, Response }          from 'express';
+import { CardInput, CollectionInput }               from '../schemas/collection.schema';
 import { createCard,
      createCollection,
     deleteCard, 
@@ -7,8 +7,8 @@ import { createCard,
     findAllCollections, 
     findCollectionById, 
     updateCard, 
-    updateCollectionById }                          from "../services/collection.service";
-import { TypedRequest, TypedRequestQuery }          from "./types/collection.controller.types";
+    updateCollectionById }                          from '../services/collection.service';
+import { TypedRequest, TypedRequestQuery }          from './types/collection.controller.types';
 
 
 /**
