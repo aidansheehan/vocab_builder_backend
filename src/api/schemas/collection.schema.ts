@@ -6,7 +6,7 @@ import { object, array, string, TypeOf } from 'zod';
 export const cardSchema = object({
     body: object({
         lexi: string({ required_error: 'Lexi is required' }),
-        textPrompt: string({ required_error: 'Prompt is required' })  //TODO rename textPrompt VBB-8
+        textPrompt: string({ required_error: 'Prompt is required' })
     })
 })
 

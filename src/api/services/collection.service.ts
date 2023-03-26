@@ -13,7 +13,7 @@ export const createCollection = async (data: CollectionInfo, user_id: string) =>
     const fDescription  = sentenceCase(data.description);   //Format description
 
     //Construct formatted collection data with ID
-    const dataWithId = { title: fTitle, description: fDescription, "user_id": user_id }
+    const dataWithId = { title: fTitle, description: fDescription, 'user_id': user_id }
 
     const collection = await collectionModel.create(dataWithId);
     return collection.toJSON();
@@ -23,9 +23,9 @@ export const createCollection = async (data: CollectionInfo, user_id: string) =>
 export const findAllCollections = async(user_id: string, title?: string) => {
 
     //Condition to search if given
-    const condition = title ? { title: { $regex: new RegExp(title), $options: "i" }} : {};
+    const condition = title ? { title: { $regex: new RegExp(title), $options: 'i' }} : {};
 
-    return await collectionModel.find({ "user_id": user_id, ...condition });
+    return await collectionModel.find({ 'user_id': user_id, ...condition });
 }
 
 // find one collection by it's ID
@@ -38,6 +38,8 @@ export const updateCollectionById = async (data: CollectionInfo, id: string) => 
 
     const fTitle        = titleCase(data.title);            //Format title
     const fDescription  = sentenceCase(data.description);   //Format description
+
+    console.log('F DESC: ', fDescription)
 
     //Construct formatted data object
     const fData = { title: fTitle, description: fDescription };
@@ -67,7 +69,7 @@ export const createCard = async (collectionId: string, data: Card) => {
     const fTextPrompt   = standardizeTextInput(data.textPrompt);    //Format textPrompt to lower case with no trailing whitespace
 
     //Give the card an ID
-    const cardWithId = { lexi: fLexi, textPrompt: fTextPrompt, "id": uuid() };
+    const cardWithId = { lexi: fLexi, textPrompt: fTextPrompt, 'id': uuid() };
 
     //Add the card to the collection's array of cards
     collection.cards.push(cardWithId);

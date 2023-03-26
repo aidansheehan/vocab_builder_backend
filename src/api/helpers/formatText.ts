@@ -24,17 +24,43 @@ export const titleCase = (v_: string): string => {
 }
 
 /**
- * Function to uppercase every letter at the start of a sentence in a multi sentence string
+ * Function to capitalize the first letter in each sentence of a multi-sentence string
+ * and add periods after each sentence if necessary.
  */
 export const sentenceCase = (v_: string): string => {
 
-    const standardizedV_    = standardizeTextInput(v_);     //Remove trailing whitespace and convert to lower case
-    const splitV_           = standardizedV_.split('.');    //Split into array of sentences
-
-    //Loop through array and format each sentence to start with upper case letter, then join sentences into single string
-    const fV_               = splitV_.map(s_ => _.startCase(s_)).join('. '); 
-
-    //Return sentence cased multi-sentence string
+    // Remove trailing whitespace and convert to lower case
+    const standardizedV_ = standardizeTextInput(v_);
+  
+    // Split into array of sentences
+    const sentences = standardizedV_.split(/(?<=[.?!])(?=\s+|$)/);
+  
+    // Loop through array and format each sentence to start with upper case letter
+    const formattedSentences = sentences.map((sentence) => {
+      
+        // Trim any leading/trailing whitespace
+      const trimmedSentence = sentence.trim();
+  
+      // Capitalize first letter of each sentence
+      const capitalizedSentence = trimmedSentence.replace(
+        /^\s*\w/,
+        (c) => c.toUpperCase()
+      );
+  
+      // Check if last character is a letter or not
+      const lastCharIsLetter = /[a-zA-Z]$/.test(trimmedSentence);
+  
+      // Add period if last character is a letter
+      if (lastCharIsLetter) {
+        return `${capitalizedSentence}.`;
+      } else {
+        return capitalizedSentence;
+      }
+    });
+  
+    // Join sentences into single string with period and space
+    const fV_ = formattedSentences.join(' ');
+  
     return fV_;
-
-}
+    
+  };

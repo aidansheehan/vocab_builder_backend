@@ -113,7 +113,7 @@ export const updateCollectionHandler = async (
         //Update collection with new data
         await updateCollectionById(req.body, collectionId);
 
-        //Retrieve updated collection from DB TODO i'm not sure if this will always wait for DB to be updated?
+        //Retrieve updated collection from DB
         const newCollection = await findCollectionById(collectionId);
 
         res.status(200).json({
