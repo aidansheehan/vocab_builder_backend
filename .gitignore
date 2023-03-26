@@ -151,5 +151,7 @@ Session.vim
 .netrwhist
 # auto-generated tag files
 tags
+# Production build
+dist/
 
 # End of https://www.gitignore.io/api/node,vim,git,macos,linux,sublimetext

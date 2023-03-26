@@ -259,8 +259,6 @@ export const deleteCardHandler = async (
         const { collectionId }  = req.params;   //Get collectionId from request params
         const { cardId }        = req.params;   //Get cardId from request params
 
-
-
         //Delete card and return modified collection object
         const newCollection = await deleteCard(collectionId, cardId);
 

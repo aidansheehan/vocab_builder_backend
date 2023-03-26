@@ -17,6 +17,9 @@ RUN npm install -g nodemon
 # Bundle app source
 COPY . .
 
+# Set NODE_ENV to development
+ENV NODE_ENV=development
+
 # port
 EXPOSE 8000
 

@@ -1,7 +1,6 @@
 require('dotenv').config();
 
 import express, { NextFunction, Request, Response } from 'express';
-import morgan                                       from 'morgan';
 import config                                       from 'config';
 import cors                                         from 'cors';
 import cookieParser                                 from 'cookie-parser';
@@ -63,7 +62,12 @@ const app = express();
 app.use(express.json({ limit: '10kb' }));   //1. Body Parser
 app.use(cookieParser());                    //2. Cookie Parser
 
-if (process.env.NODE_ENV === 'development') app.use(morgan('dev')); //3. Logger
+//3. Logger
+if (process.env.NODE_ENV === 'development') {
+    import('morgan').then((morgan) => {
+        app.use(morgan.default('dev'));
+    })
+}
 
 //4. Cors
 app.use(

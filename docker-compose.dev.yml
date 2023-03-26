@@ -6,7 +6,7 @@ services:
     restart: always
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     environment:
       MONGODB_DATABASE_NAME: ${MONGODB_DATABASE_NAME}
       MONGODB_PASSWORD: ${MONGODB_PASSWORD}
