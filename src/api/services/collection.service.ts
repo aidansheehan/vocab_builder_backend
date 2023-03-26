@@ -39,8 +39,6 @@ export const updateCollectionById = async (data: CollectionInfo, id: string) => 
     const fTitle        = titleCase(data.title);            //Format title
     const fDescription  = sentenceCase(data.description);   //Format description
 
-    console.log('F DESC: ', fDescription)
-
     //Construct formatted data object
     const fData = { title: fTitle, description: fDescription };
 
