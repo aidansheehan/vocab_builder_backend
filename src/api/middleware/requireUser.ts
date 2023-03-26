@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response }  from "express";
-import AppError                             from "../helpers/appError";
+import { NextFunction, Request, Response }  from 'express';
+import AppError                             from '../helpers/appError';
 
 /**
  * This middleware will be called after deserializeUser middleware to check

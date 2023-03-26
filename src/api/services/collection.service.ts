@@ -1,15 +1,19 @@
-import collectionModel, { Card, Collection }    from "../models/collection.model";
-import { uuid }                                 from "uuidv4";
+import collectionModel, { Card, CollectionInfo }                from '../models/collection.model';
+import { uuid }                                                 from 'uuidv4';
+import { standardizeTextInput, titleCase, sentenceCase }        from '../helpers/formatText';
 
 /**
  * Collection service for communicating with the database
  */
 
 // createCollection service
-export const createCollection = async (data: Partial<Collection>, user_id: string) => {
+export const createCollection = async (data: CollectionInfo, user_id: string) => {
 
-    //TODO may need excluded fields here - what does FE need returned
-    const dataWithId = { ...data, "user_id": user_id }
+    const fTitle        = titleCase(data.title);            //Format title
+    const fDescription  = sentenceCase(data.description);   //Format description
+
+    //Construct formatted collection data with ID
+    const dataWithId = { title: fTitle, description: fDescription, 'user_id': user_id }
 
     const collection = await collectionModel.create(dataWithId);
     return collection.toJSON();
@@ -19,9 +23,9 @@ export const createCollection = async (data: Partial<Collection>, user_id: strin
 export const findAllCollections = async(user_id: string, title?: string) => {
 
     //Condition to search if given
-    const condition = title ? { title: { $regex: new RegExp(title), $options: "i" }} : {};
+    const condition = title ? { title: { $regex: new RegExp(title), $options: 'i' }} : {};
 
-    return await collectionModel.find({ "user_id": user_id, ...condition });
+    return await collectionModel.find({ 'user_id': user_id, ...condition });
 }
 
 // find one collection by it's ID
@@ -30,10 +34,18 @@ export const findCollectionById = async (id: string) => {
 }
 
 // Update a collection by it's ID
-export const updateCollectionById = async (data: Partial<Collection>, id: string) => {
+export const updateCollectionById = async (data: CollectionInfo, id: string) => {
+
+    const fTitle        = titleCase(data.title);            //Format title
+    const fDescription  = sentenceCase(data.description);   //Format description
+
+    console.log('F DESC: ', fDescription)
+
+    //Construct formatted data object
+    const fData = { title: fTitle, description: fDescription };
 
     //TODO investigate prob need options here to prevent overwrite of collection id, may be other probs like wrong type
-    return await collectionModel.findByIdAndUpdate(id, data);
+    return await collectionModel.findByIdAndUpdate(id, fData);
 
 }
 
@@ -48,13 +60,16 @@ export const createCard = async (collectionId: string, data: Card) => {
     //Find the collection by its ID
     const collection = await collectionModel.findById(collectionId);
 
-    //Check if the collection exists
+    //Check if the collection exists TODO remove or standardize VBB-8
     if (!collection) {
         throw new Error(`Collection with ID ${collectionId} not found.`);
     }
 
+    const fLexi         = standardizeTextInput(data.lexi);          //Format lexi to lower case with no trailing whitespace
+    const fTextPrompt   = standardizeTextInput(data.textPrompt);    //Format textPrompt to lower case with no trailing whitespace
+
     //Give the card an ID
-    const cardWithId = { ...data, "id": uuid() };
+    const cardWithId = { lexi: fLexi, textPrompt: fTextPrompt, 'id': uuid() };
 
     //Add the card to the collection's array of cards
     collection.cards.push(cardWithId);
@@ -69,16 +84,19 @@ export const createCard = async (collectionId: string, data: Card) => {
 //Service to update an existing card in a collection
 export const updateCard = async (collectionId: string, cardId: string, data: Card) => {
 
-    //Find the collection by its ID
+    //Find the collection by its ID TODO remove this logic or always do this check here VBB-8
     const collection = await collectionModel.findById(collectionId);
 
-    //Check if the collection exists
+    //Check if the collection exists TODO remove or standardize VBB-8
     if (!collection) {
         throw new Error(`Collection with ID ${collectionId} not found.`);
     }
 
+    const fLexi         = standardizeTextInput(data.lexi);      //Format lexi to lower case with no trailing whitespace
+    const fTextPrompt   = standardizeTextInput(data.textPrompt);    //Format textPrompt to lower case with no trailing whitespace
+
     //Construct card with ID
-    const cardWithId = { ...data, id: cardId }
+    const cardWithId = { lexi: fLexi, textPrompt: fTextPrompt, id: cardId }
 
     //Find the card TODO should refactor by indexing array VBB-8
     const newCards = collection.cards.map(c_ => {

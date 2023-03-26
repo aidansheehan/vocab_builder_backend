@@ -1,8 +1,8 @@
-import { NextFunction, Request, Response }  from "express";
-import { findUserById }                     from "../services/user.service";
-import AppError                             from "../helpers/appError";
-import redisClient                          from "../helpers/connectRedis";
-import { verifyJwt }                        from "../helpers/jwt";
+import { NextFunction, Request, Response }  from 'express';
+import { findUserById }                     from '../services/user.service';
+import AppError                             from '../helpers/appError';
+import redisClient                          from '../helpers/connectRedis';
+import { verifyJwt }                        from '../helpers/jwt';
 
 /**
  * Middleware responsible for deserializing the User

@@ -1,12 +1,11 @@
 import {
-    DocumentType,
     getModelForClass,
     index,
     modelOptions,
     pre,
     prop
-} from '@typegoose/typegoose';
-import bcrypt from 'bcryptjs';
+}                           from '@typegoose/typegoose';
+import bcrypt               from 'bcryptjs';
 
 @index({ email: 1 })
 @pre<User>('save', async function () {

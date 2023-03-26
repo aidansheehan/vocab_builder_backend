@@ -9,9 +9,8 @@ import connectDB                                    from './api/helpers/connectD
 import userRouter                                   from './api/routes/user.route';
 import authRouter                                   from './api/routes/auth.route';
 import collectionRouter                             from './api/routes/collection.route';
-
-const swaggerJSDoc  = require('swagger-jsdoc');
-const swaggerUi     = require('swagger-ui-express');
+import swaggerJSDoc                                 from 'swagger-jsdoc';
+import swaggerUi                                    from 'swagger-ui-express';
 
 const swaggerDefinition = {
     openapi: '3.0.0',
@@ -51,7 +50,7 @@ const swaggerDefinition = {
 
 const options = {
     swaggerDefinition,
-    apis: ['./src/api/routes/*.ts']
+    apis: [ './src/api/routes/*.ts' ]
 };
 
 const swaggerSpec = swaggerJSDoc(options);
@@ -80,7 +79,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/collections', collectionRouter);
 
 //6. Documentation with Swagger and JSDoc
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 //Testing
 app.get('/healthChecker', (req: Request, res: Response, next: NextFunction) => {

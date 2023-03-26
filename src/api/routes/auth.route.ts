@@ -8,6 +8,7 @@ import { deserializeUser }                      from '../middleware/deserializeU
 import { requireUser }                          from '../middleware/requireUser';
 import { validate }                             from '../middleware/validate';
 import { createUserSchema, loginUserSchema }    from '../schemas/user.schema';
+
 /**
  * Routes to
  *  - login a user
@@ -112,8 +113,6 @@ router.post('/register', validate(createUserSchema), registerHandler);
  *         description: Internal server error.
  */
 router.post('/login', validate(loginUserSchema), loginHandler);
-
-//Refresh access token route
 
 /**
  * @openapi

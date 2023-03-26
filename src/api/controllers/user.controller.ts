@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response }  from "express";
-import { findAllUsers }                     from "../services/user.service";
+import { NextFunction, Request, Response }  from 'express';
+import { findAllUsers }                     from '../services/user.service';
 
 /**
  * User controller

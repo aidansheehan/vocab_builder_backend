@@ -1,4 +1,4 @@
-import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose";
+import { getModelForClass, prop } from '@typegoose/typegoose';
 
 //Export the card class to be used as Typescript type
 export class Card {
@@ -6,7 +6,7 @@ export class Card {
     lexi: string;
 
     @prop({required: true})
-    description: string;
+    textPrompt: string;
 }
 
 //Export the card with generated ID class to be used as Typescript type
@@ -15,7 +15,7 @@ export class CardWithId {
     lexi: string;
 
     @prop({required: true})
-    description: string;
+    textPrompt: string;
 
     @prop({required: true})
     id: string
@@ -35,6 +35,15 @@ export class Collection {
     @prop()
     cards: Array<CardWithId>;
 
+}
+
+//Export the collection info class to be used as a typescript type
+export class CollectionInfo {
+    @prop()
+    title: string;
+
+    @prop()
+    description: string;
 }
 
 //Create the colection model from the Collection class
