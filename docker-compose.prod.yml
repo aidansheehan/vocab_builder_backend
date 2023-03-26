@@ -1,0 +1,55 @@
+version: '3.8'
+services:
+
+  vocab-builder:
+    container_name: vocab-builder
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    environment:
+      MONGODB_DATABASE_NAME: ${MONGODB_DATABASE_NAME}
+      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
+      MONGODB_USERNAME: ${MONGODB_USERNAME}
+      ACCESS_TOKEN_PRIVATE_KEY: ${ACCESS_TOKEN_PRIVATE_KEY}
+      ACCESS_TOKEN_PUBLIC_KEY: ${ACCESS_TOKEN_PUBLIC_KEY}
+    env_file:
+      - ./.env
+    volumes:
+      - ./src:/src
+      - ./nodemon.json:/nodemon.json
+    ports:
+      - '8000:8000'
+    depends_on:
+      redis:
+        condition: service_started
+      mongo:
+        condition: service_started
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGODB_DATABASE_NAME}
+    env_file:
+      - ./.env
+    volumes:
+      - mongo:/data/db
+    ports:
+      - '6000:27017'
+    command:
+      - mongod
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis:/data
+      
+volumes:
+  mongo:
+  redis:

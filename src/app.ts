@@ -1,16 +1,15 @@
 require('dotenv').config();
 
 import express, { NextFunction, Request, Response } from 'express';
-import morgan                                       from 'morgan';
 import config                                       from 'config';
 import cors                                         from 'cors';
 import cookieParser                                 from 'cookie-parser';
 import connectDB                                    from './api/helpers/connectDB';
 import userRouter                                   from './api/routes/user.route';
 import authRouter                                   from './api/routes/auth.route';
-
-const swaggerJSDoc  = require('swagger-jsdoc');
-const swaggerUi     = require('swagger-ui-express');
+import collectionRouter                             from './api/routes/collection.route';
+import swaggerJSDoc                                 from 'swagger-jsdoc';
+import swaggerUi                                    from 'swagger-ui-express';
 
 const swaggerDefinition = {
     openapi: '3.0.0',
@@ -50,7 +49,7 @@ const swaggerDefinition = {
 
 const options = {
     swaggerDefinition,
-    apis: ['./src/api/routes/*.ts']
+    apis: [ './src/api/routes/*.ts' ]
 };
 
 const swaggerSpec = swaggerJSDoc(options);
@@ -63,7 +62,12 @@ const app = express();
 app.use(express.json({ limit: '10kb' }));   //1. Body Parser
 app.use(cookieParser());                    //2. Cookie Parser
 
-if (process.env.NODE_ENV === 'development') app.use(morgan('dev')); //3. Logger
+//3. Logger
+if (process.env.NODE_ENV === 'development') {
+    import('morgan').then((morgan) => {
+        app.use(morgan.default('dev'));
+    })
+}
 
 //4. Cors
 app.use(
@@ -76,9 +80,10 @@ app.use(
 // 5. Routes 
 app.use('/api/users', userRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/collections', collectionRouter);
 
 //6. Documentation with Swagger and JSDoc
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 //Testing
 app.get('/healthChecker', (req: Request, res: Response, next: NextFunction) => {
