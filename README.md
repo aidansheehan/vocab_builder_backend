@@ -43,6 +43,15 @@ Documentation is generated using
 
 When the vocab-builder application is running, the docs are hosted on the /docs route, eg if running locally `localhost:8000/docs`
 
+## Authors
+* **Aidan Sheehan** <aidanmsheehan@gmail.com>
+
+## Ticketing
+See [Jira Project](https://vocab-builder.atlassian.net/jira/software/projects/VBB/boards/2) to track current tickets.
+
+## Versioning
+TBD
+
 ## Contributing
 If you are interested in contributing to this project, please contact the author before making any changes or submitting pull requests. You can reach out to the author via [email](mailto:aidanmsheehan@gmail.com).
 
