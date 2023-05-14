@@ -59,6 +59,17 @@ const app = express();
 
 /** Middleware */
 
+//Enable CORS preflight requests
+// app.options('*', cors()); // include before other routes
+
+//4. Cors
+app.use(
+    cors({
+        origin: config.get<string>('origin'),
+        credentials: true,
+    })
+);
+
 app.use(express.json({ limit: '10kb' }));   //1. Body Parser
 app.use(cookieParser());                    //2. Cookie Parser
 
@@ -69,13 +80,13 @@ if (process.env.NODE_ENV === 'development') {
     })
 }
 
-//4. Cors
-app.use(
-    cors({
-        origin: config.get<string>('origin'),
-        credentials: true,
-    })
-);
+// //4. Cors
+// app.use(
+//     cors({
+//         origin: config.get<string>('origin'),
+//         credentials: true,
+//     })
+// );
 
 // 5. Routes 
 app.use('/api/users', userRouter);
