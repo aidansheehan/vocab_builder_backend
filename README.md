@@ -41,7 +41,7 @@ To build the services:
 ````
 make prod-build
 ````
-To run the services:
+To run the services in a detached state:
 ````
 make prod-up
 ````
