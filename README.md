@@ -20,21 +20,39 @@ Create a `.env` file in the project root and set the following environment varia
 Check the API documentation hosted at `/docs` route for available endpoints and their details.
 
 ## Docker Compose Requirements
-Before starting the server, run the following commands to build and run the services:
+I use Docker Compose to manage my development and production environments. I have simplified the process of building and running the services using Make commands.
 
-For development environment:
+### Development Environment
+To build the services:
 ````
-docker-compose -f docker-compose.dev.yml build
-docker-compose -f docker-compose.dev.yml up
+make dev-build
+````
+To run the services:
+````
+make dev-up
+````
+To stop and remove the containers, networks and volumes:
+````
+make dev-down
 ````
 
-For production environment:
+### Production Environment
+To build the services:
 ````
-docker-compose -f docker-compose.prod.yml build
-docker-compose -f docker-compose.prod.yml up
+make prod-build
+````
+To run the services:
+````
+make prod-up
+````
+To stop and remove the containers, networks and volumes:
+````
+make prod-down
 ````
 
 These commands will generate Redis, MongoDB, and vocab-builder app containers.
+### Note
+Make sure you have `make` installed on your system to run these commands. You can install it using your system's package manager. For example, on Ubuntu, you can use `sudo apt install make`.
 
 ## Documentation
 Documentation is generated using
