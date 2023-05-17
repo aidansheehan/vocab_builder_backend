@@ -165,6 +165,11 @@ export const refreshAccessTokenHandler = async(
         //Get the refresh token from cookie
         const refreshToken = req.cookies.refreshToken as string;
 
+        //Return forbidden fail message if refreshToken doesn't exist
+        if (!refreshToken) {
+            return next(new AppError('Refresh token expired', 403));
+        }
+
         //Validate the refresh token
         const decoded = verifyJwt<{ sub: string }>(
             refreshToken,
