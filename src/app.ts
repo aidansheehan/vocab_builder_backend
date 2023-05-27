@@ -74,7 +74,7 @@ app.use(
             }
 
             //Return true, origin allowed
-            return callback(null, true);
+            return callback(null, origin);
         },
         credentials: true,
         methods: ['GET', 'POST', 'PUT', 'DELETE'],  //Allow these methods
